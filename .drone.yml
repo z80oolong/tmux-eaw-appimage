@@ -2,7 +2,8 @@ kind: pipeline
 name: default
 
 steps:
-- name: docker
+## builds and pushes to hub.docker.com, the docker repo is just private right now.
+- name: docker build
   image: plugins/docker
   settings:
     username:
@@ -10,4 +11,21 @@ steps:
     password:
       from_secret: docker_password
     repo: nelsonenzo/tmux-appimage
-    tags: latest
+    tags: ${DRONE_COMMIT}
+
+- name: create release on github
+  image: nelsonenzo/tmux-appimage:latest
+  environment:
+    FILE: /opt/releases/tmux-3.0a-x86_64.AppImage
+    GITHUB_TOKEN:
+      from_secret: drone-github-personal-access-token
+  commands:
+    - |
+      curl -X POST -d '{ "tag_name": "${DRONE_REPO_BRANCH}", "target_commitish": "${DRONE_COMMIT}", "name": "Tmux AppImage $RELEASE_TAG ${DRONE_REPO_BRANCH}", "body": "Appimage release for branch ${DRONE_REPO_BRANCH}", "draft": false, "prerelease": false }' \
+      -H "Authorization: token ${GITHUB_TOKEN}" \
+      https://api.github.com/repos/nelsonenzo/tmux-appimage/releases | jq .id > releaseid.txt
+    - 'curl \
+        -H "Authorization: token $GITHUB_TOKEN" \
+        -H "Content-Type: $(file -b --mime-type $FILE)" \
+        --data-binary @$FILE \
+        "https://uploads.github.com/repos/nelsonenzo/tmux-appimage/releases/$(cat releaseid.txt)/assets?name=$(basename $FILE)"'
