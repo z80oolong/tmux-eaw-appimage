@@ -3,7 +3,7 @@
 FROM centos:centos6.9
 ## install build tools
 RUN /usr/bin/yum groupinstall -y "Development Tools"
-RUN /usr/bin/yum install -y wget jq
+RUN /usr/bin/yum install -y wget epel-release jq
 
 RUN wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage \
     && chmod +x linuxdeploy-x86_64.AppImage \
