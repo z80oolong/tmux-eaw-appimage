@@ -24,8 +24,11 @@ steps:
       curl -X POST -d '{ "tag_name": "${DRONE_REPO_BRANCH}", "target_commitish": "${DRONE_COMMIT}", "name": "Tmux AppImage $RELEASE_TAG ${DRONE_REPO_BRANCH}", "body": "Appimage release for branch ${DRONE_REPO_BRANCH}", "draft": false, "prerelease": false }' \
       -H "Authorization: token ${GITHUB_TOKEN}" \
       https://api.github.com/repos/nelsonenzo/tmux-appimage/releases | jq .id > releaseid.txt
-    - 'curl \
-        -H "Authorization: token $GITHUB_TOKEN" \
-        -H "Content-Type: $(file -b --mime-type $FILE)" \
-        --data-binary @$FILE \
-        "https://uploads.github.com/repos/nelsonenzo/tmux-appimage/releases/$(cat releaseid.txt)/assets?name=$(basename $FILE)"'
+    - echo $FILE
+    - echo $(file -b --mime-type $FILE)
+    - echo @$FILE
+    - |
+      curl -H "Authorization: token $GITHUB_TOKEN" \
+      -H "Content-Type: $(file -b --mime-type $FILE)" \
+      --data-binary @$FILE \
+      "https://uploads.github.com/repos/nelsonenzo/tmux-appimage/releases/$(cat releaseid.txt)/assets?name=$(basename $FILE)"
