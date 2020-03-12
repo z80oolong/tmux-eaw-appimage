@@ -14,7 +14,7 @@ steps:
     tags: ${DRONE_COMMIT}
 
 - name: create release on github
-  image: nelsonenzo/tmux-appimage:latest
+  image: nelsonenzo/tmux-appimage:${DRONE_COMMIT}
   environment:
     FILE: /opt/releases/tmux-3.0a-x86_64.AppImage
     GITHUB_TOKEN:
