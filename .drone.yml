@@ -3,15 +3,15 @@ name: default
 
 steps:
 ## builds and pushes to hub.docker.com, the docker repo is just private right now.
-- name: docker build
-  image: plugins/docker
-  settings:
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
-    repo: nelsonenzo/tmux-appimage
-    tags: ${DRONE_COMMIT}
+# - name: docker build
+#   image: plugins/docker
+#   settings:
+#     username:
+#       from_secret: docker_username
+#     password:
+#       from_secret: docker_password
+#     repo: nelsonenzo/tmux-appimage
+#     tags: ${DRONE_COMMIT}
 
 - name: create release on github
   image: nelsonenzo/tmux-appimage:${DRONE_COMMIT}
@@ -21,16 +21,25 @@ steps:
       from_secret: drone-github-personal-access-token
   commands:
     - |
-      curl -X POST -d '{ "tag_name": "${DRONE_REPO_BRANCH}", "target_commitish": "${DRONE_COMMIT}", "name": "Tmux AppImage $RELEASE_TAG ${DRONE_REPO_BRANCH}", "body": "Appimage release for branch ${DRONE_REPO_BRANCH}", "draft": false, "prerelease": false }' \
+      cat > github.json <<- EOM
+      {
+      "tag_name": "${DRONE_REPO_BRANCH}",
+      "target_commitish": "${DRONE_REPO_BRANCH}",
+      "name": "Tmux AppImage $RELEASE_TAG ${DRONE_REPO_BRANCH}",
+      "body": "Appimage release for branch ${DRONE_REPO_BRANCH}",
+      "draft": true,
+      "prerelease": true
+      }
+      EOM
+    - echo $(cat github.json)
+    - |
+      curl -X POST -d @github.json \
       -H "Authorization: token ${GITHUB_TOKEN}" \
-      https://api.github.com/repos/nelsonenzo/tmux-appimage/releases | jq .id > releaseid.txt
-    - echo $FILE
-    - echo $(file -b --mime-type $FILE)
-    - echo @$FILE
-    - echo $(cat releaseid.txt)
-    - echo $(basename $FILE)
+      https://api.github.com/repos/nelsonenzo/tmux-appimage/releases > githubresponse.txt
+    - echo $(cat githubresponse.txt)
+    - export GITHUB_RELEASE_ID=$(jq .id githubresponse.txt)
     - |
       curl -H "Authorization: token $GITHUB_TOKEN" \
       -H "Content-Type: $(file -b --mime-type $FILE)" \
       --data-binary @$FILE \
-      "https://uploads.github.com/repos/nelsonenzo/tmux-appimage/releases/$(cat releaseid.txt)/assets?name=$(basename $FILE)"
+      "https://uploads.github.com/repos/nelsonenzo/tmux-appimage/releases/$GITHUB_RELEASE_ID/assets?name=$(basename $FILE)"
