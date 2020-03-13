@@ -38,6 +38,7 @@ steps:
       https://api.github.com/repos/nelsonenzo/tmux-appimage/releases > githubresponse.txt
     - echo $(cat githubresponse.txt)
     - export GITHUB_RELEASE_ID=$(jq .id githubresponse.txt)
+    - echo $GITHUB_RELEASE_ID
     - |
       curl -H "Authorization: token $GITHUB_TOKEN" \
       -H "Content-Type: $(file -b --mime-type $FILE)" \
