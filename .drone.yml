@@ -27,6 +27,8 @@ steps:
     - echo $FILE
     - echo $(file -b --mime-type $FILE)
     - echo @$FILE
+    - echo $(cat releaseid.txt)
+    - echo $(basename $FILE)
     - |
       curl -H "Authorization: token $GITHUB_TOKEN" \
       -H "Content-Type: $(file -b --mime-type $FILE)" \
