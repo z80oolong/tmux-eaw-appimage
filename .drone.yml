@@ -34,13 +34,13 @@ steps:
     - echo $(cat github.json)
     - |
       curl -X POST -d @github.json \
-      -H "Authorization: token ${GITHUB_TOKEN}" \
+      -H "Authorization: token $${GITHUB_TOKEN}" \
       https://api.github.com/repos/nelsonenzo/tmux-appimage/releases > githubresponse.txt
     - echo $(cat githubresponse.txt)
     - export GITHUB_RELEASE_ID=$(jq .id githubresponse.txt)
     - echo $GITHUB_RELEASE_ID
     - |
-      curl -H "Authorization: token $GITHUB_TOKEN" \
+      curl -H "Authorization: token $${GITHUB_TOKEN}" \
       -H "Content-Type: $(file -b --mime-type $FILE)" \
       --data-binary @$FILE \
       "https://uploads.github.com/repos/nelsonenzo/tmux-appimage/releases/$GITHUB_RELEASE_ID/assets?name=$(basename $FILE)"
