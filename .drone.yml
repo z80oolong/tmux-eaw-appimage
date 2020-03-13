@@ -18,7 +18,7 @@ steps:
   environment:
     FILE: /opt/releases/tmux-3.0a-x86_64.AppImage
     GITHUB_TOKEN:
-      from_secret: drone-github-personal-access-token
+      from_secret: personal_access_token
   commands:
     - |
       cat > github.json <<- EOM
