@@ -9,18 +9,21 @@ FROM centos:centos6.9
 RUN /usr/bin/yum groupinstall -y "Development Tools"
 RUN /usr/bin/yum install -y wget gawk
 
-## install linuxdeploy
-
-RUN wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage \
-    && chmod +x linuxdeploy-x86_64.AppImage \
-    && ./linuxdeploy-x86_64.AppImage --appimage-extract \
-    && ln -nfs /squashfs-root/usr/bin/linuxdeploy /usr/bin/linuxdeploy
-
-## prepare the environment to build tmux
+## setup the environment to build tmux
 
 RUN mkdir -p /tmux/archive && mkdir -p /tmux/workdir 
 
 ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+## install linuxdeploy
+
+RUN wget -O /tmux/archive/linuxdeploy-x86_64.AppImage https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage \
+    && echo "fd2b101e59f42d98b53d76d4856993c3cce5bf6f9336da56e2422b575c15f967  /tmux/archive/linuxdeploy-x86_64.AppImage" | sha256sum --check -
+
+RUN cd / \
+    && chmod +x /tmux/archive/linuxdeploy-x86_64.AppImage \
+    && ./tmux/archive/linuxdeploy-x86_64.AppImage --appimage-extract \
+    && ln -nfs /squashfs-root/usr/bin/linuxdeploy /usr/bin/linuxdeploy
 
 ## install m4
 
