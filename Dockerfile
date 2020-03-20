@@ -11,26 +11,27 @@ RUN /usr/bin/yum install -y wget gawk
 
 ## setup the environment to build tmux
 
-RUN mkdir -p /tmux/archive && mkdir -p /tmux/workdir 
+RUN mkdir -p /usr/local/tmux/archive && mkdir -p /usr/local/tmux/workdir 
 
 ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 ## install linuxdeploy
 
-RUN wget -O /tmux/archive/linuxdeploy-x86_64.AppImage https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage \
-    && echo "fd2b101e59f42d98b53d76d4856993c3cce5bf6f9336da56e2422b575c15f967  /tmux/archive/linuxdeploy-x86_64.AppImage" | sha256sum --check -
+RUN wget -O /usr/local/tmux/archive/linuxdeploy-x86_64.AppImage https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage \
+    && echo "fd2b101e59f42d98b53d76d4856993c3cce5bf6f9336da56e2422b575c15f967  /usr/local/tmux/archive/linuxdeploy-x86_64.AppImage" | sha256sum --check -
 
-RUN cd / \
-    && chmod +x /tmux/archive/linuxdeploy-x86_64.AppImage \
-    && ./tmux/archive/linuxdeploy-x86_64.AppImage --appimage-extract \
-    && ln -nfs /squashfs-root/usr/bin/linuxdeploy /usr/bin/linuxdeploy
+RUN cd /usr/local \
+    && chmod +x /usr/local/tmux/archive/linuxdeploy-x86_64.AppImage \
+    && /usr/local/tmux/archive/linuxdeploy-x86_64.AppImage --appimage-extract \
+    && cd /usr/local/bin \
+    && ln -nfs ../squashfs-root/usr/bin/linuxdeploy ./linuxdeploy
 
 ## install m4
 
-RUN wget -O /tmux/archive/m4-1.4.18.tar.xz https://ftp.gnu.org/gnu/m4/m4-1.4.18.tar.xz \
-    && echo "f2c1e86ca0a404ff281631bdc8377638992744b175afb806e25871a24a934e07  /tmux/archive/m4-1.4.18.tar.xz" | sha256sum --check -
+RUN wget -O /usr/local/tmux/archive/m4-1.4.18.tar.xz https://ftp.gnu.org/gnu/m4/m4-1.4.18.tar.xz \
+    && echo "f2c1e86ca0a404ff281631bdc8377638992744b175afb806e25871a24a934e07  /usr/local/tmux/archive/m4-1.4.18.tar.xz" | sha256sum --check -
 
-RUN cd /tmux/workdir \
+RUN cd /usr/local/tmux/workdir \
     && tar -xvf ../archive/m4-1.4.18.tar.xz \
     && cd m4-1.4.18 \
     && mkdir ./build && cd ./build \
@@ -42,10 +43,10 @@ RUN cd /tmux/workdir \
 
 ## install autoconf
 
-RUN wget -O /tmux/archive/autoconf-2.69.tar.gz https://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz \
-    && echo "954bd69b391edc12d6a4a51a2dd1476543da5c6bbf05a95b59dc0dd6fd4c2969  /tmux/archive/autoconf-2.69.tar.gz" | sha256sum --check -
+RUN wget -O /usr/local/tmux/archive/autoconf-2.69.tar.gz https://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz \
+    && echo "954bd69b391edc12d6a4a51a2dd1476543da5c6bbf05a95b59dc0dd6fd4c2969  /usr/local/tmux/archive/autoconf-2.69.tar.gz" | sha256sum --check -
 
-RUN cd /tmux/workdir \
+RUN cd /usr/local/tmux/workdir \
     && tar -xvf ../archive/autoconf-2.69.tar.gz \
     && cd autoconf-2.69 \
     && mkdir ./build && cd ./build \
@@ -57,10 +58,10 @@ RUN cd /tmux/workdir \
 
 ## install automake
 
-RUN wget -O /tmux/archive/automake-1.16.1.tar.xz https://ftp.gnu.org/gnu/automake/automake-1.16.1.tar.xz \
-    && echo "5d05bb38a23fd3312b10aea93840feec685bdf4a41146e78882848165d3ae921  /tmux/archive/automake-1.16.1.tar.xz" | sha256sum --check -
+RUN wget -O /usr/local/tmux/archive/automake-1.16.1.tar.xz https://ftp.gnu.org/gnu/automake/automake-1.16.1.tar.xz \
+    && echo "5d05bb38a23fd3312b10aea93840feec685bdf4a41146e78882848165d3ae921  /usr/local/tmux/archive/automake-1.16.1.tar.xz" | sha256sum --check -
 
-RUN cd /tmux/workdir \
+RUN cd /usr/local/tmux/workdir \
     && tar -xvf ../archive/automake-1.16.1.tar.xz \
     && cd automake-1.16.1 \
     && mkdir ./build && cd ./build \
@@ -72,10 +73,10 @@ RUN cd /tmux/workdir \
 
 ## install libtool
 
-RUN wget -O /tmux/archive/libtool-2.4.6.tar.xz https://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.xz \
-    && echo "7c87a8c2c8c0fc9cd5019e402bed4292462d00a718a7cd5f11218153bf28b26f  /tmux/archive/libtool-2.4.6.tar.xz" | sha256sum --check -
+RUN wget -O /usr/local/tmux/archive/libtool-2.4.6.tar.xz https://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.xz \
+    && echo "7c87a8c2c8c0fc9cd5019e402bed4292462d00a718a7cd5f11218153bf28b26f  /usr/local/tmux/archive/libtool-2.4.6.tar.xz" | sha256sum --check -
 
-RUN cd /tmux/workdir \
+RUN cd /usr/local/tmux/workdir \
     && tar -xvf ../archive/libtool-2.4.6.tar.xz \
     && cd libtool-2.4.6 \
     && mkdir ./build && cd ./build \
@@ -87,10 +88,10 @@ RUN cd /tmux/workdir \
 
 ## install libressl
 
-RUN wget -O /tmux/archive/libressl-3.0.2.tar.gz https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.0.2.tar.gz \
-    && echo "df7b172bf79b957dd27ef36dcaa1fb162562c0e8999e194aa8c1a3df2f15398e  /tmux/archive/libressl-3.0.2.tar.gz" | sha256sum --check -
+RUN wget -O /usr/local/tmux/archive/libressl-3.0.2.tar.gz https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.0.2.tar.gz \
+    && echo "df7b172bf79b957dd27ef36dcaa1fb162562c0e8999e194aa8c1a3df2f15398e  /usr/local/tmux/archive/libressl-3.0.2.tar.gz" | sha256sum --check -
 
-RUN cd /tmux/workdir \
+RUN cd /usr/local/tmux/workdir \
     && tar -xvf ../archive/libressl-3.0.2.tar.gz \
     && cd libressl-3.0.2 \
     && mkdir ./build && cd ./build \
@@ -102,10 +103,10 @@ RUN cd /tmux/workdir \
 
 ## install libressl
 
-RUN wget -O /tmux/archive/libevent-9a9b92ed.zip https://github.com/libevent/libevent/archive/9a9b92ed06249be8326d82e2483b87e1a1b4caac.zip \
-    && echo "5c23997986432e42f12c2b70f1b3200295a2d93082db7768cfbba442bcf0bba8  /tmux/archive/libevent-9a9b92ed.zip" | sha256sum --check -
+RUN wget -O /usr/local/tmux/archive/libevent-9a9b92ed.zip https://github.com/libevent/libevent/archive/9a9b92ed06249be8326d82e2483b87e1a1b4caac.zip \
+    && echo "5c23997986432e42f12c2b70f1b3200295a2d93082db7768cfbba442bcf0bba8  /usr/local/tmux/archive/libevent-9a9b92ed.zip" | sha256sum --check -
 
-RUN cd /tmux/workdir \
+RUN cd /usr/local/tmux/workdir \
     && unzip ../archive/libevent-9a9b92ed.zip \
     && mv libevent-9a9b92ed06249be8326d82e2483b87e1a1b4caac libevent-9a9b92ed \
     && cd libevent-9a9b92ed \
@@ -119,16 +120,16 @@ RUN cd /tmux/workdir \
 
 ## install ncurses
 
-RUN wget -O /tmux/archive/ncurses-6.1.tar.gz https://ftpmirror.gnu.org/ncurses/ncurses-6.1.tar.gz \
-    && echo "aa057eeeb4a14d470101eff4597d5833dcef5965331be3528c08d99cebaa0d17  /tmux/archive/ncurses-6.1.tar.gz" | sha256sum --check -
+RUN wget -O /usr/local/tmux/archive/ncurses-6.1.tar.gz https://ftpmirror.gnu.org/ncurses/ncurses-6.1.tar.gz \
+    && echo "aa057eeeb4a14d470101eff4597d5833dcef5965331be3528c08d99cebaa0d17  /usr/local/tmux/archive/ncurses-6.1.tar.gz" | sha256sum --check -
 
-RUN cd /tmux/workdir \
+RUN cd /usr/local/tmux/workdir \
     && tar -xvf ../archive/ncurses-6.1.tar.gz \
     && cd ncurses-6.1 \
     && mkdir ./build && cd ./build \
     && /usr/bin/env LD_RUN_PATH="" LIBRARY_PATH="" PKG_CONFIG_PATH="" PKG_CONFIG_LIBDIR="" \
                     CFLAGS="-I/usr/local/include" CPPFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" \
-                    ../configure --prefix=/usr/local \
+                    ../configure --prefix=/usr/local --datarootdir=/usr/local/share \
 		                 --with-terminfo-dirs="/usr/local/share/terminfo:/usr/local/lib/terminfo:/usr/share/terminfo:/usr/lib/terminfo:/lib/terminfo" \
 		                 --disable-dependency-tracking --disable-silent-rules --disable-debug \
 		                 --enable-pc-files --enable-sigwinch --enable-symlinks --enable-widec --with-shared --with-gpm=no \
@@ -158,43 +159,51 @@ RUN cd /tmux/workdir \
 ARG VERSION=3.0a
 ENV RELEASE_TAG=$VERSION
 
-RUN wget -O /tmux/archive/tmux-$RELEASE_TAG.tar.gz https://github.com/tmux/tmux/releases/download/$RELEASE_TAG/tmux-$RELEASE_TAG.tar.gz \
+RUN if [ "$RELEASE_TAG" = "3.1-rc3" ]; then \
+      wget -O /usr/local/tmux/archive/tmux-$RELEASE_TAG.tar.gz https://github.com/tmux/tmux/releases/download/3.1/tmux-$RELEASE_TAG.tar.gz; \
+    else \
+      wget -O /usr/local/tmux/archive/tmux-$RELEASE_TAG.tar.gz https://github.com/tmux/tmux/releases/download/$RELEASE_TAG/tmux-$RELEASE_TAG.tar.gz; \
+    fi \
     && case "$RELEASE_TAG" in \
-         2.3)  echo "55313e132f0f42de7e020bf6323a1939ee02ab79c48634aa07475db41573852b  /tmux/archive/tmux-2.3.tar.gz"  | sha256sum --check - ;; \
-         2.4)  echo "757d6b13231d0d9dd48404968fc114ac09e005d475705ad0cd4b7166f799b349  /tmux/archive/tmux-2.4.tar.gz"  | sha256sum --check - ;; \
-         2.5)  echo "ae135ec37c1bf6b7750a84e3a35e93d91033a806943e034521c8af51b12d95df  /tmux/archive/tmux-2.5.tar.gz"  | sha256sum --check - ;; \
-         2.6)  echo "b17cd170a94d7b58c0698752e1f4f263ab6dc47425230df7e53a6435cc7cd7e8  /tmux/archive/tmux-2.6.tar.gz"  | sha256sum --check - ;; \
-         2.7)  echo "9ded7d100313f6bc5a87404a4048b3745d61f2332f99ec1400a7c4ed9485d452  /tmux/archive/tmux-2.7.tar.gz"  | sha256sum --check - ;; \
-         2.8)  echo "7f6bf335634fafecff878d78de389562ea7f73a7367f268b66d37ea13617a2ba  /tmux/archive/tmux-2.8.tar.gz"  | sha256sum --check - ;; \
-         2.9a) echo "839d167a4517a6bffa6b6074e89a9a8630547b2dea2086f1fad15af12ab23b25  /tmux/archive/tmux-2.9a.tar.gz" | sha256sum --check - ;; \
-         3.0)  echo "9edcd78df80962ee2e6471a8f647602be5ded62bb41c574172bb3dc3d0b9b4b4  /tmux/archive/tmux-3.0.tar.gz"  | sha256sum --check - ;; \
-         3.0a) echo "4ad1df28b4afa969e59c08061b45082fdc49ff512f30fc8e43217d7b0e5f8db9  /tmux/archive/tmux-3.0a.tar.gz" | sha256sum --check - ;; \
-	 *)    false ;; \
+         2.3)     echo "55313e132f0f42de7e020bf6323a1939ee02ab79c48634aa07475db41573852b  /usr/local/tmux/archive/tmux-2.3.tar.gz"     | sha256sum --check - ;; \
+         2.4)     echo "757d6b13231d0d9dd48404968fc114ac09e005d475705ad0cd4b7166f799b349  /usr/local/tmux/archive/tmux-2.4.tar.gz"     | sha256sum --check - ;; \
+         2.5)     echo "ae135ec37c1bf6b7750a84e3a35e93d91033a806943e034521c8af51b12d95df  /usr/local/tmux/archive/tmux-2.5.tar.gz"     | sha256sum --check - ;; \
+         2.6)     echo "b17cd170a94d7b58c0698752e1f4f263ab6dc47425230df7e53a6435cc7cd7e8  /usr/local/tmux/archive/tmux-2.6.tar.gz"     | sha256sum --check - ;; \
+         2.7)     echo "9ded7d100313f6bc5a87404a4048b3745d61f2332f99ec1400a7c4ed9485d452  /usr/local/tmux/archive/tmux-2.7.tar.gz"     | sha256sum --check - ;; \
+         2.8)     echo "7f6bf335634fafecff878d78de389562ea7f73a7367f268b66d37ea13617a2ba  /usr/local/tmux/archive/tmux-2.8.tar.gz"     | sha256sum --check - ;; \
+         2.9)     echo "34901232f486fd99f3a39e864575e658b5d49f43289ccc6ee57c365f2e2c2980  /usr/local/tmux/archive/tmux-2.9.tar.gz"     | sha256sum --check - ;; \ 
+         2.9a)    echo "839d167a4517a6bffa6b6074e89a9a8630547b2dea2086f1fad15af12ab23b25  /usr/local/tmux/archive/tmux-2.9a.tar.gz"    | sha256sum --check - ;; \
+         3.0)     echo "9edcd78df80962ee2e6471a8f647602be5ded62bb41c574172bb3dc3d0b9b4b4  /usr/local/tmux/archive/tmux-3.0.tar.gz"     | sha256sum --check - ;; \
+         3.0a)    echo "4ad1df28b4afa969e59c08061b45082fdc49ff512f30fc8e43217d7b0e5f8db9  /usr/local/tmux/archive/tmux-3.0a.tar.gz"    | sha256sum --check - ;; \
+	 3.1-rc3) echo "882025b6b2b0da67b429825851ff10925046e692ef96c5bf1db459b3610b96b1  /usr/local/tmux/archive/tmux-3.1-rc3.tar.gz" | sha256sum --check - ;; \ 
+	 *)      false ;; \
        esac
 
-RUN wget -O /tmux/archive/tmux-$RELEASE_TAG-fix.diff https://raw.githubusercontent.com/z80oolong/tmux-eaw-fix/master/tmux-$RELEASE_TAG-fix.diff \
+RUN wget -O /usr/local/tmux/archive/tmux-$RELEASE_TAG-fix.diff https://raw.githubusercontent.com/z80oolong/tmux-eaw-fix/master/tmux-$RELEASE_TAG-fix.diff \
     && case "$RELEASE_TAG" in \
-         2.3)  echo "1e2a5dae47fd72c4daf4a398c0c7735cbfa4a607bf83b1ae96c9cef92310a6a9  /tmux/archive/tmux-2.3-fix.diff"  | sha256sum --check - ;; \
-         2.4)  echo "f38f3042385bf464eb52a72e2d71897fd101098bb5ccabd725fad8a35f75dc20  /tmux/archive/tmux-2.4-fix.diff"  | sha256sum --check - ;; \
-         2.5)  echo "f34a7c1e59ed0b58990ddcc878e192c3e8ad86dbb2046d723ba5a324fe0d8063  /tmux/archive/tmux-2.5-fix.diff"  | sha256sum --check - ;; \
-         2.6)  echo "04266939b43cad4f08136890103ea073e8f9f0c494080b9a5a612b26f0bdf0d9  /tmux/archive/tmux-2.6-fix.diff"  | sha256sum --check - ;; \
-         2.7)  echo "c16bb71d87c9d320676beb7bca9a1b4d69a14d3b747b3b2106f2dfa67e94dc12  /tmux/archive/tmux-2.7-fix.diff"  | sha256sum --check - ;; \
-         2.8)  echo "23256a8df82b80d598c3bb1090f839de9195f2027613bdf11fb63b3bcbba9f76  /tmux/archive/tmux-2.8-fix.diff"  | sha256sum --check - ;; \
-         2.9a) echo "148bbe3a4f86dcd9c4528f4e898a2def93c50cef3c12f512c69ef27473f45187  /tmux/archive/tmux-2.9a-fix.diff" | sha256sum --check - ;; \
-         3.0)  echo "b5e994fc07d96b6bafcaa2dd984274662bd73f7cb4a916a4048ac0757bf7c97e  /tmux/archive/tmux-3.0-fix.diff"  | sha256sum --check - ;; \
-         3.0a) echo "d223ddc4d7621416ae0f8ac874155bc963a16365ada9598eff74129141ad7948  /tmux/archive/tmux-3.0a-fix.diff" | sha256sum --check - ;; \
-	 *)    false ;; \
+         2.3)     echo "1e2a5dae47fd72c4daf4a398c0c7735cbfa4a607bf83b1ae96c9cef92310a6a9  /usr/local/tmux/archive/tmux-2.3-fix.diff"     | sha256sum --check - ;; \
+         2.4)     echo "f38f3042385bf464eb52a72e2d71897fd101098bb5ccabd725fad8a35f75dc20  /usr/local/tmux/archive/tmux-2.4-fix.diff"     | sha256sum --check - ;; \
+         2.5)     echo "f34a7c1e59ed0b58990ddcc878e192c3e8ad86dbb2046d723ba5a324fe0d8063  /usr/local/tmux/archive/tmux-2.5-fix.diff"     | sha256sum --check - ;; \
+         2.6)     echo "04266939b43cad4f08136890103ea073e8f9f0c494080b9a5a612b26f0bdf0d9  /usr/local/tmux/archive/tmux-2.6-fix.diff"     | sha256sum --check - ;; \
+         2.7)     echo "c16bb71d87c9d320676beb7bca9a1b4d69a14d3b747b3b2106f2dfa67e94dc12  /usr/local/tmux/archive/tmux-2.7-fix.diff"     | sha256sum --check - ;; \
+         2.8)     echo "23256a8df82b80d598c3bb1090f839de9195f2027613bdf11fb63b3bcbba9f76  /usr/local/tmux/archive/tmux-2.8-fix.diff"     | sha256sum --check - ;; \
+         2.9)     echo "148bbe3a4f86dcd9c4528f4e898a2def93c50cef3c12f512c69ef27473f45187  /usr/local/tmux/archive/tmux-2.9-fix.diff"     | sha256sum --check - ;; \
+         2.9a)    echo "148bbe3a4f86dcd9c4528f4e898a2def93c50cef3c12f512c69ef27473f45187  /usr/local/tmux/archive/tmux-2.9a-fix.diff"    | sha256sum --check - ;; \
+         3.0)     echo "b5e994fc07d96b6bafcaa2dd984274662bd73f7cb4a916a4048ac0757bf7c97e  /usr/local/tmux/archive/tmux-3.0-fix.diff"     | sha256sum --check - ;; \
+         3.0a)    echo "d223ddc4d7621416ae0f8ac874155bc963a16365ada9598eff74129141ad7948  /usr/local/tmux/archive/tmux-3.0a-fix.diff"    | sha256sum --check - ;; \
+         3.1-rc3) echo "f9efcbdcd7048b549141ca06be435dbc142d99fefc06464995aea650f778d480  /usr/local/tmux/archive/tmux-3.1-rc3-fix.diff" | sha256sum --check - ;; \
+	 *)       false ;; \
        esac
 
 ## build tmux-$RELEASE_TAG
 
-RUN cd /tmux/workdir \
+RUN cd /usr/local/tmux/workdir \
     && tar -xvf ../archive/tmux-$RELEASE_TAG.tar.gz \
     && cd tmux-$RELEASE_TAG \
-    && patch -p1 < /tmux/archive/tmux-$RELEASE_TAG-fix.diff \
+    && patch -p1 < /usr/local/tmux/archive/tmux-$RELEASE_TAG-fix.diff \
     && /usr/bin/env LD_RUN_PATH="" LIBRARY_PATH="" PKG_CONFIG_PATH="" PKG_CONFIG_LIBDIR="" \
                     CFLAGS="-I/usr/local/include" CPPFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" \ 
-                    ./configure --prefix=/tmux/MakeBuild --disable-dependency-tracking --disable-silent-rules --disable-debug \
+                    ./configure --prefix=/usr/local --disable-dependency-tracking --disable-silent-rules --disable-debug \
     && make -j5 \
     && make install
 
