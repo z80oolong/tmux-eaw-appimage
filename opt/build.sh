@@ -3,7 +3,7 @@
 mkdir /opt/releases
 
 if [ "$RELEASE_TAG" = "HEAD" ]; then
-	export RELEASE_TAG="$RELEASE_TAG-`(cd /usr/local/tmux/workdir/tmux-HEAD && git log --oneline -n 1 | cut -d ' ' -f 1)`"
+	export RELEASE_TAG="$RELEASE_TAG-$HEAD_COMMIT"
 fi
 
 export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
