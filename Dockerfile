@@ -218,9 +218,9 @@ RUN cd /usr/local/tmux/archive \
          2.9a)    echo "839d167a4517a6bffa6b6074e89a9a8630547b2dea2086f1fad15af12ab23b25  ./tmux-2.9a.tar.gz"    | sha256sum --check - ;; \
          3.0)     echo "9edcd78df80962ee2e6471a8f647602be5ded62bb41c574172bb3dc3d0b9b4b4  ./tmux-3.0.tar.gz"     | sha256sum --check - ;; \
          3.0a)    echo "4ad1df28b4afa969e59c08061b45082fdc49ff512f30fc8e43217d7b0e5f8db9  ./tmux-3.0a.tar.gz"    | sha256sum --check - ;; \
-	 3.1-rc3) echo "882025b6b2b0da67b429825851ff10925046e692ef96c5bf1db459b3610b96b1  ./tmux-3.1-rc3.tar.gz" | sha256sum --check - ;; \
-	 HEAD)    true  ;; \
-	 *)       false ;; \
+         3.1-rc3) echo "882025b6b2b0da67b429825851ff10925046e692ef96c5bf1db459b3610b96b1  ./tmux-3.1-rc3.tar.gz" | sha256sum --check - ;; \
+         HEAD)    true  ;; \
+         *)       false ;; \
        esac
 
 RUN cd /usr/local/tmux/archive \
