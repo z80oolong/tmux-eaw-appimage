@@ -171,7 +171,6 @@ RUN cd /usr/local/tmux/workdir \
     && /usr/bin/env LD_RUN_PATH="" LIBRARY_PATH="" PKG_CONFIG_PATH="" PKG_CONFIG_LIBDIR="" \
                     CFLAGS="-I/usr/local/include" CPPFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" \
                     ../configure --prefix=/usr/local --datarootdir=/usr/local/share \
-		                 --with-terminfo-dirs="/usr/local/share/terminfo:/usr/local/lib/terminfo:/usr/share/terminfo:/usr/lib/terminfo:/lib/terminfo" \
 		                 --disable-dependency-tracking --disable-silent-rules --disable-debug \
 		                 --enable-pc-files --enable-sigwinch --enable-symlinks --enable-widec --with-shared --with-gpm=no \
     && make -j5 \

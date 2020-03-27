@@ -1,0 +1,4 @@
+#!/bin/sh
+#export APPDIR="/tmp/.mount-tmuxXXXXXX"
+export TERMINFO="${APPDIR}/usr/lib/terminfo"
+exec $APPDIR/usr/bin/tmux "$@"
