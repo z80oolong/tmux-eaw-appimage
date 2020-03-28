@@ -24,12 +24,23 @@
 
 そして、シェルスクリプトが正常に終了すると、ディレクトリ ```./opt/release``` 以下に [AppImage ファイル][APPI] ```tmux-eaw-3.0a-x86_64.AppImage``` が生成されます。
 
-この [AppImage ファイル][APPI] ```tmux-eaw-3.0a-x86_64.AppImage``` を、以下の通りにして適当なファイル実行権限を付与し、環境変数 ```PATH``` が示すディレクトリに配置した後、 ```tmux``` にシンボリックリンクを貼ると、コマンドラインから ```tmux``` と入力することで、 [East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]を適用した [tmux][TMUX] を起動することが可能となります。
+なお、シェルスクリプト ```build-appimage.sh``` は、デフォルトでは最新の安定版である [tmux 3.0a][TMUX] の [AppImage ファイル][APPI]を生成しますが、以下のようにオプション ```-r, --release``` で安定版のバージョン番号を指定することにより、指定されたバージョンの [tmux][TMUX] の [AppImage ファイル][APPI]を生成することが出来ます。
+
+```
+  $ sudo ./build-appimage.sh -r 2.9a        (旧安定版 tmux 2.9a をビルド。)
+  $ sudo ./build-appimage.sh --release 2.7  (旧安定版 tmux 2.7  をビルド。)
+```
+
+## AppImage ファイルの使用法
+
+前述で生成した [AppImage ファイル][APPI] ```tmux-eaw-3.0a-x86_64.AppImage``` を用いて [tmux][TMUX] を起動するには、以下の通りにして  [AppImage ファイル][APPI] ```tmux-eaw-3.0a-x86_64.AppImage``` にファイルの実行権限を付与して環境変数 ```PATH``` が示すディレクトリに配置します。
+
+そして、以下のようにして ```tmux-eaw-3.0a-x86_64.AppImage``` から ```tmux``` へシンボリックリンクを張ると、コマンドラインから ```tmux``` と入力することで、 [East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]を適用した [tmux][TMUX] が起動します。
 
 ```
   $ cd opt/release
-  $ chmod u+x ./tmux-eaw-3.0a-x86_64.AppImage
-  $ cp -pRv ./tmux-eaw-3.0a-x86_64.AppImage /usr/local/bin    # (一例として /usr/local/bin 以下に導入する場合を示す。)
+  $ sudo chmod u+x ./tmux-eaw-3.0a-x86_64.AppImage
+  $ sudo cp -pRv ./tmux-eaw-3.0a-x86_64.AppImage /usr/local/bin    # (一例として /usr/local/bin 以下に導入する場合を示す。)
   $ cd /usr/local/bin
   $ sudo ln -sf tmux-eaw-3.0a-x86_64.AppImage tmux
   ...
@@ -38,13 +49,6 @@
 ```
 
 ここで、 [East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]が適用された [tmux][TMUX] の使用法の詳細については、 "[tmux 2.5 以降において East Asian Ambiguous Character を全角文字の幅で表示する][GST1]" を参照して下さい。
-
-なお、シェルスクリプト ```build-appimage.sh``` は、デフォルトでは最新の安定版である [tmux 3.0a][TMUX] の [AppImage ファイル][APPI]を生成しますが、以下のようにオプション ```-r, --release``` で安定版のバージョン番号を指定することにより、指定されたバージョンの [tmux][TMUX] の [AppImage ファイル][APPI]を生成することが出来ます。
-
-```
-  $ ./build-appimage.sh -r 2.9a        (旧安定版 tmux 2.9a をビルド。)
-  $ ./build-appimage.sh --release 2.7  (旧安定版 tmux 2.7  をビルド。)
-```
 
 ## AppImage ファイルの配布
 
