@@ -197,7 +197,7 @@ RUN cd /usr/local/tmux/workdir \
 ## download the source code of tmux-$VERSION
 
 ARG VERSION=3.0a
-ENV HEAD_COMMIT=5b71943f
+ENV HEAD_COMMIT=f986539e
 ENV RELEASE_TAG=$VERSION
 
 RUN cd /usr/local/tmux/archive \

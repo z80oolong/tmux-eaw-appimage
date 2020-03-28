@@ -37,4 +37,4 @@ if [ "x$RELEASE" = "x" ]; then
 	export RELEASE="3.0a"
 fi
 
-sudo docker build . -t tmux --build-arg VERSION=$RELEASE && sudo -v && sudo docker run -it -v $PWD/opt:/opt tmux
+docker build . -t tmux --build-arg VERSION=$RELEASE && docker run -it -v $PWD/opt:/opt tmux

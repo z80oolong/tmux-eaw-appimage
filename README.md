@@ -17,7 +17,7 @@
 そして、本リポジトリ内のシェルスクリプト ```build-appimage.sh``` を以下の通りに起動します。
 
 ```
-  $ ./build-appimage.sh
+  $ sudo ./build-appimage.sh
 ```
 
 シェルスクリプト ```build-appimage.sh``` の起動により、[East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]を適用した [tmux][TMUX] をビルドするための Docker コンテナが構築され、 Docker コンテナ内にて、 [tmux][TMUX] 及び [tmux][TMUX] に依存するライブラリ群等がビルドされ、 [tmux][TMUX] を起動するための [AppImage ファイル][APPI]が生成されます。
@@ -29,7 +29,7 @@
 ```
   $ cd opt/release
   $ chmod u+x ./tmux-eaw-3.0a-x86_64.AppImage
-  $ install -v ./tmux-eaw-3.0a-x86_64.AppImage /usr/local/bin    # (一例として /usr/local/bin 以下に導入する場合を示す。)
+  $ cp -pRv ./tmux-eaw-3.0a-x86_64.AppImage /usr/local/bin    # (一例として /usr/local/bin 以下に導入する場合を示す。)
   $ cd /usr/local/bin
   $ sudo ln -sf tmux-eaw-3.0a-x86_64.AppImage tmux
   ...
