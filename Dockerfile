@@ -2,18 +2,33 @@
 ## Author: Z.OOL. (NAKATSUKA, Yukitaka) <zool@zool.jpn.org>
 ## Date:
 
-FROM centos:centos6.9
+FROM debian:jessie
+MAINTAINER Z.OOL. (NAKATSUKA, Yukitaka) <zool@zool.jpn.org>
 
-## install build tools
-
-RUN /usr/bin/yum groupinstall -y "Development Tools"
-RUN /usr/bin/yum install -y wget gawk
-
-## setup the environment to build tmux
-
-RUN mkdir -p /usr/local/tmux/archive && mkdir -p /usr/local/tmux/workdir 
+## setup environment variables to build tmux.
 
 ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ENV DEBIAN_FRONTEND=noninterractive
+
+## apt-get update && apt-get upgrade
+
+RUN /usr/bin/env LANG=C apt-get update && /usr/bin/env LANG=C apt-get upgrade
+
+## install and setup locale
+
+RUN apt-get install -y --no-install-recommends apt-utils locales \
+    && echo "en_US.UTF-8 UTF-8" >  /etc/locale.gen \
+    && echo "ja_JP.UTF-8 UTF-8" >> /etc/locale.gen \
+    && /usr/sbin/locale-gen \
+    && update-locale LANG=ja_JP.UTF-8
+
+## install build-essential and etc.
+
+RUN apt-get install -y --no-install-recommends build-essential wget gawk unzip file git ca-certificates
+
+## setup working directory.
+
+RUN mkdir -p /usr/local/tmux/archive && mkdir -p /usr/local/tmux/workdir 
 
 ## install linuxdeploy
 
@@ -121,7 +136,7 @@ RUN cd /usr/local/tmux/workdir \
     && /usr/bin/env LD_RUN_PATH="" LIBRARY_PATH="" PKG_CONFIG_PATH="" PKG_CONFIG_LIBDIR="" \
                     CFLAGS="-I/usr/local/include" CPPFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" \
                     ../configure --prefix=/usr/local --disable-dependency-tracking --disable-silent-rules --disable-debug \
-    && make -j5 \
+    && make \
     && make install
 
 ## install libressl
@@ -197,7 +212,7 @@ RUN cd /usr/local/tmux/workdir \
 ## download the source code of tmux-$VERSION
 
 ARG VERSION=3.0a
-ENV HEAD_COMMIT=f986539e
+ENV HEAD_COMMIT=450315aa
 ENV RELEASE_TAG=$VERSION
 
 RUN cd /usr/local/tmux/archive \
@@ -239,7 +254,7 @@ RUN cd /usr/local/tmux/archive \
          3.0)     echo "b5e994fc07d96b6bafcaa2dd984274662bd73f7cb4a916a4048ac0757bf7c97e  ./tmux-3.0-fix.diff"               | sha256sum --check - ;; \
          3.0a)    echo "d223ddc4d7621416ae0f8ac874155bc963a16365ada9598eff74129141ad7948  ./tmux-3.0a-fix.diff"              | sha256sum --check - ;; \
          3.1-rc3) echo "f9efcbdcd7048b549141ca06be435dbc142d99fefc06464995aea650f778d480  ./tmux-3.1-rc3-fix.diff"           | sha256sum --check - ;; \
-         HEAD)    echo "25727b55d7e96ce3de2c43ca7468443556dd52484812838b9b75bc1a2cab79ea  ./tmux-HEAD-$HEAD_COMMIT-fix.diff" | sha256sum --check - ;; \
+         HEAD)    echo "f08121f7c231451444b208ef5dcd026962664b730dde62d3df096d4ddcfbd928  ./tmux-HEAD-$HEAD_COMMIT-fix.diff" | sha256sum --check - ;; \
          *)       false ;; \
        esac
 
