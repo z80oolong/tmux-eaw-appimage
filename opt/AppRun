@@ -2,5 +2,6 @@
 #export APPDIR="/tmp/.mount-tmuxXXXXXX"
 export TERMINFO="${APPDIR}/usr/lib/terminfo"
 export PATH="${APPDIR}/usr/bin:${PATH}"
+unset ARGV0
 
 exec tmux "$@"
