@@ -1,5 +1,8 @@
 #!/bin/sh
 #export APPDIR="/tmp/.mount-tmuxXXXXXX"
+if [ "x${APPDIR}" = "x" ]; then
+  export APPDIR="$(dirname "$(readlink -f "${0}")")"
+fi
 export TERMINFO="${APPDIR}/usr/lib/terminfo"
 export PATH="${APPDIR}/usr/bin:${PATH}"
 unset ARGV0

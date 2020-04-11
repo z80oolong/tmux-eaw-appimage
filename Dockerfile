@@ -282,8 +282,8 @@ RUN cd /usr/local/tmux/workdir \
 ## build tmux-eaw-$RELEASE_TAG-x86_64.ApppImage
 
 ## complete the appimage build.
-# COPY ./opt /opt
-# RUN /opt/build.sh
+COPY ./opt/AppRun ./opt/build.sh ./opt/tmux-logo-square.png ./opt/tmux.desktop /opt/
+RUN /opt/build.sh
 
 ## Produces artifact
 ## /opt/releases/tmux-3.0a-x86_64.AppImage

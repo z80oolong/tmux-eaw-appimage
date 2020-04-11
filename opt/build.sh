@@ -1,14 +1,14 @@
 #!/bin/bash
 
+cd /usr/local/tmux/workdir
+mkdir -p ./AppDir/usr/lib
 mkdir /opt/releases
 
 if [ "$RELEASE_TAG" = "HEAD" ]; then
 	export RELEASE_TAG="$RELEASE_TAG-$HEAD_COMMIT"
 fi
 
-mkdir -p ./AppDir/usr/lib
 chmod +x /opt/AppRun
-
 cp -pRv /usr/local/share/terminfo ./AppDir/usr/lib
 
 export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
