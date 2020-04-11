@@ -33,6 +33,12 @@ while getopts ":vhr-:" opt; do
     esac
 done
 
+export HEAD_COMMIT=450315aa
+
+if ["$RELEASE" = "HEAD" ]; then
+  export RELEASE="HEAD-$HEAD_COMMIT"
+fi
+
 if [ "x$RELEASE" = "x" ]; then
   export RELEASE="3.0a"
 fi
