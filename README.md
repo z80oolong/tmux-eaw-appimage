@@ -17,7 +17,7 @@
 そして、本リポジトリ内のシェルスクリプト ```build-appimage.sh``` を以下の通りに起動します。
 
 ```
-  $ sudo ./build-appimage.sh
+  $ ./build-appimage.sh
 ```
 
 シェルスクリプト ```build-appimage.sh``` の起動により、[East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]を適用した [tmux][TMUX] をビルドするための Docker コンテナが構築され、 Docker コンテナ内にて、 [tmux][TMUX] 及び [tmux][TMUX] に依存するライブラリ群等がビルドされ、 [tmux][TMUX] を起動するための [AppImage ファイル][APPI]が生成されます。
@@ -27,8 +27,8 @@
 なお、シェルスクリプト ```build-appimage.sh``` は、デフォルトでは最新の安定版である [tmux 3.0a][TMUX] の [AppImage ファイル][APPI]を生成しますが、以下のようにオプション ```-r, --release``` で安定版のバージョン番号を指定することにより、指定されたバージョンの [tmux][TMUX] の [AppImage ファイル][APPI]を生成することが出来ます。
 
 ```
-  $ sudo ./build-appimage.sh -r 2.9a        (旧安定版 tmux 2.9a をビルド。)
-  $ sudo ./build-appimage.sh --release 2.7  (旧安定版 tmux 2.7  をビルド。)
+  $ ./build-appimage.sh -r 2.9a        (旧安定版 tmux 2.9a をビルド。)
+  $ ./build-appimage.sh --release 2.7  (旧安定版 tmux 2.7  をビルド。)
 ```
 
 ## AppImage ファイルの使用法
@@ -39,7 +39,7 @@
 
 ```
   $ cd opt/release
-  $ sudo chmod u+x ./tmux-eaw-3.0a-x86_64.AppImage
+  $ chmod u+x ./tmux-eaw-3.0a-x86_64.AppImage
   $ sudo cp -pRv ./tmux-eaw-3.0a-x86_64.AppImage /usr/local/bin    # (一例として /usr/local/bin 以下に導入する場合を示す。)
   $ cd /usr/local/bin
   $ sudo ln -sf tmux-eaw-3.0a-x86_64.AppImage tmux
