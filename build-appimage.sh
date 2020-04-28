@@ -33,16 +33,18 @@ while getopts ":vhr-:" opt; do
     esac
 done
 
-export HEAD_COMMIT="b117c3b8"
+export HEAD_COMMIT="79b4d839"
 
 if [ "x$RELEASE" = "x" ]; then
-  export RELEASE="3.0a"
+  export RELEASE="3.1"
 fi
+
+mkdir -p ./opt/releases
 
 docker build . -t tmux --build-arg VERSION=$RELEASE && \
 docker create -ti --name tmuxcontainer tmux /bin/bash && \
 if [ "$RELEASE" = "HEAD" ]; then \
   export RELEASE="HEAD-$HEAD_COMMIT"; \
 fi && \
-docker cp tmuxcontainer:/opt/releases/tmux-eaw-$RELEASE-x86_64.AppImage . && \
+docker cp tmuxcontainer:/opt/releases/tmux-eaw-$RELEASE-x86_64.AppImage ./opt/releases && \
 docker rm -f tmuxcontainer
