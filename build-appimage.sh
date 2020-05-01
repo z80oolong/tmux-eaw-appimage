@@ -33,11 +33,11 @@ while getopts ":vhr-:" opt; do
     esac
 done
 
-export HEAD_COMMIT="79b4d839"
-
 if [ "x$RELEASE" = "x" ]; then
-  export RELEASE="3.1"
+  export RELEASE="3.1a"
 fi
+
+export HEAD_COMMIT="5af69439"
 
 mkdir -p ./opt/releases
 

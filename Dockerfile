@@ -26,6 +26,10 @@ RUN apt-get install -y --no-install-recommends apt-utils locales \
 
 RUN apt-get install -y --no-install-recommends build-essential wget gawk unzip file git ca-certificates
 
+## clean /var/cache/apt/archives/* and /var/lib/apt/lists/*
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
 ## setup working directory.
 
 RUN mkdir -p /usr/local/tmux/archive && mkdir -p /usr/local/tmux/workdir 
@@ -139,37 +143,21 @@ RUN cd /usr/local/tmux/workdir \
     && make \
     && make install
 
-## install libressl
-
-RUN cd /usr/local/tmux/archive \
-    && wget -O ./libressl-3.0.2.tar.gz https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.0.2.tar.gz \
-    && echo "df7b172bf79b957dd27ef36dcaa1fb162562c0e8999e194aa8c1a3df2f15398e  ./libressl-3.0.2.tar.gz" | sha256sum --check -
-
-RUN cd /usr/local/tmux/workdir \
-    && tar -xvf ../archive/libressl-3.0.2.tar.gz \
-    && cd libressl-3.0.2 \
-    && mkdir ./build && cd ./build \
-    && /usr/bin/env LD_RUN_PATH="" LIBRARY_PATH="" PKG_CONFIG_PATH="" PKG_CONFIG_LIBDIR="" \
-                    CFLAGS="-I/usr/local/include" CPPFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" \
-                    ../configure --prefix=/usr/local --disable-dependency-tracking --disable-silent-rules --disable-debug \
-    && make -j5 \
-    && make install
-
 ## install libevent
 
 RUN cd /usr/local/tmux/archive \
-    && wget -O ./libevent-9a9b92ed.zip https://github.com/libevent/libevent/archive/9a9b92ed06249be8326d82e2483b87e1a1b4caac.zip \
-    && echo "5c23997986432e42f12c2b70f1b3200295a2d93082db7768cfbba442bcf0bba8  ./libevent-9a9b92ed.zip" | sha256sum --check -
+    && wget -O ./libevent-f0b3160f.zip https://github.com/libevent/libevent/archive/f0b3160f8ce7fbd411493dcd023f562f4f9d17ee.zip \
+    && echo "cdbfaf9d1d7a7b66319e6a51030e2da8ac3c603f4ca655995e9e05faf1d7b796  ./libevent-f0b3160f.zip" | sha256sum --check -
 
 RUN cd /usr/local/tmux/workdir \
-    && unzip ../archive/libevent-9a9b92ed.zip \
-    && mv libevent-9a9b92ed06249be8326d82e2483b87e1a1b4caac libevent-9a9b92ed \
-    && cd libevent-9a9b92ed \
+    && unzip ../archive/libevent-f0b3160f.zip \
+    && mv libevent-f0b3160f8ce7fbd411493dcd023f562f4f9d17ee libevent-f0b3160f \
+    && cd libevent-f0b3160f \
     && sed -i.bak -e 's/^#pragma GCC diagnostic .*$//g' ./sample/watch-timing.c \
     && ./autogen.sh \
     && /usr/bin/env LD_RUN_PATH="" LIBRARY_PATH="" PKG_CONFIG_PATH="" PKG_CONFIG_LIBDIR="" \
                     CFLAGS="-I/usr/local/include" CPPFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" \
-                    ./configure --prefix=/usr/local --disable-dependency-tracking --disable-silent-rules --disable-debug \
+                    ./configure --prefix=/usr/local --disable-dependency-tracking --disable-silent-rules --disable-openssl --disable-debug \
     && make -j5 \
     && make install
 
@@ -209,11 +197,18 @@ RUN cd /usr/local/tmux/workdir \
     && ln -sf ncursesw/ncurses.h ncurses.h && ln -sf ncursesw/panel.h panel.h \
     && ln -sf ncursesw/term.h term.h && ln -sf ncursesw/termcap.h termcap.h
 
-## download the source code of tmux-$VERSION
+## clean /usr/local/tmux/archive and /usr/local/tmux/workdir
 
-ARG VERSION=3.1
-ENV HEAD_COMMIT=79b4d839
+RUN rm -rf /usr/local/tmux/archive/* && rm -rf /usr/local/tmux/workdir/*
+
+## check --build-arg
+
+ARG VERSION=3.1a
+
 ENV RELEASE_TAG=$VERSION
+ENV HEAD_COMMIT=5af69439
+
+## download the source code of tmux-$VERSION
 
 RUN cd /usr/local/tmux/archive \
     && case "$RELEASE_TAG" in \
@@ -232,6 +227,7 @@ RUN cd /usr/local/tmux/archive \
          3.0)     echo "9edcd78df80962ee2e6471a8f647602be5ded62bb41c574172bb3dc3d0b9b4b4  ./tmux-3.0.tar.gz"     | sha256sum --check - ;; \
          3.0a)    echo "4ad1df28b4afa969e59c08061b45082fdc49ff512f30fc8e43217d7b0e5f8db9  ./tmux-3.0a.tar.gz"    | sha256sum --check - ;; \
          3.1)     echo "979bf38db2c36193de49149aaea5c540d18e01ccc27cf76e2aff5606bd186722  ./tmux-3.1.tar.gz"     | sha256sum --check - ;; \
+         3.1a)    echo "10687cbb02082b8b9e076cf122f1b783acc2157be73021b4bedb47e958f4e484  ./tmux-3.1a.tar.gz"    | sha256sum --check - ;; \
          HEAD)    true  ;; \
          *)       false ;; \
        esac
@@ -253,7 +249,8 @@ RUN cd /usr/local/tmux/archive \
          3.0)     echo "b5e994fc07d96b6bafcaa2dd984274662bd73f7cb4a916a4048ac0757bf7c97e  ./tmux-3.0-fix.diff"               | sha256sum --check - ;; \
          3.0a)    echo "d223ddc4d7621416ae0f8ac874155bc963a16365ada9598eff74129141ad7948  ./tmux-3.0a-fix.diff"              | sha256sum --check - ;; \
          3.1)     echo "f9efcbdcd7048b549141ca06be435dbc142d99fefc06464995aea650f778d480  ./tmux-3.1-fix.diff"               | sha256sum --check - ;; \
-         HEAD)    echo "80170b9962f10c768f5ee099f9d3bf10b09effeda34849e9bc127276885ca61b  ./tmux-HEAD-$HEAD_COMMIT-fix.diff" | sha256sum --check - ;; \
+         3.1a)    echo "f9efcbdcd7048b549141ca06be435dbc142d99fefc06464995aea650f778d480  ./tmux-3.1a-fix.diff"              | sha256sum --check - ;; \
+         HEAD)    echo "964da393cfa0b30960d78d894c5aecef0f32a935419cee39692d910ab1e3b83a  ./tmux-HEAD-$HEAD_COMMIT-fix.diff" | sha256sum --check - ;; \
          *)       false ;; \
        esac
 
@@ -277,6 +274,10 @@ RUN cd /usr/local/tmux/workdir \
                     ./configure --prefix=/usr/local --disable-dependency-tracking --disable-silent-rules --disable-debug \
     && make -j5 \
     && make install
+
+## clean /usr/local/tmux/archive and /usr/local/tmux/workdir
+
+RUN rm -rf /usr/local/tmux/archive/* && rm -rf /usr/local/tmux/workdir/*
 
 ## build tmux-eaw-$RELEASE_TAG-x86_64.ApppImage
 
