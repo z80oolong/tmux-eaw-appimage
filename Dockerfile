@@ -38,7 +38,7 @@ RUN mkdir -p /usr/local/tmux/archive && mkdir -p /usr/local/tmux/workdir
 
 RUN cd /usr/local/tmux/archive \
     && wget -O ./linuxdeploy-x86_64.AppImage https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage \
-    && echo "5b98530ad43bb8711ddd6992989a3d09e07d96e5b3b0421e7a6cf91e21719a42  ./linuxdeploy-x86_64.AppImage" | sha256sum --check -
+    && echo "e46f64977f9d9bc01bcb22d1f1412dfe96cd1487a08c933d091c3f7cba8915fd  ./linuxdeploy-x86_64.AppImage" | sha256sum --check -
 
 RUN cd /usr/local \
     && chmod +x ./tmux/archive/linuxdeploy-x86_64.AppImage \
@@ -206,7 +206,7 @@ RUN rm -rf /usr/local/tmux/archive/* && rm -rf /usr/local/tmux/workdir/*
 ARG VERSION=3.1a
 
 ENV RELEASE_TAG=$VERSION
-ENV HEAD_COMMIT=5af69439
+ENV HEAD_COMMIT=a08f1c8c
 
 ## download the source code of tmux-$VERSION
 
@@ -228,6 +228,7 @@ RUN cd /usr/local/tmux/archive \
          3.0a)    echo "4ad1df28b4afa969e59c08061b45082fdc49ff512f30fc8e43217d7b0e5f8db9  ./tmux-3.0a.tar.gz"    | sha256sum --check - ;; \
          3.1)     echo "979bf38db2c36193de49149aaea5c540d18e01ccc27cf76e2aff5606bd186722  ./tmux-3.1.tar.gz"     | sha256sum --check - ;; \
          3.1a)    echo "10687cbb02082b8b9e076cf122f1b783acc2157be73021b4bedb47e958f4e484  ./tmux-3.1a.tar.gz"    | sha256sum --check - ;; \
+         3.1b)    echo "d93f351d50af05a75fe6681085670c786d9504a5da2608e481c47cf5e1486db9  ./tmux-3.1b.tar.gz"    | sha256sum --check - ;; \
          HEAD)    true  ;; \
          *)       false ;; \
        esac
@@ -250,7 +251,8 @@ RUN cd /usr/local/tmux/archive \
          3.0a)    echo "d223ddc4d7621416ae0f8ac874155bc963a16365ada9598eff74129141ad7948  ./tmux-3.0a-fix.diff"              | sha256sum --check - ;; \
          3.1)     echo "f9efcbdcd7048b549141ca06be435dbc142d99fefc06464995aea650f778d480  ./tmux-3.1-fix.diff"               | sha256sum --check - ;; \
          3.1a)    echo "f9efcbdcd7048b549141ca06be435dbc142d99fefc06464995aea650f778d480  ./tmux-3.1a-fix.diff"              | sha256sum --check - ;; \
-         HEAD)    echo "964da393cfa0b30960d78d894c5aecef0f32a935419cee39692d910ab1e3b83a  ./tmux-HEAD-$HEAD_COMMIT-fix.diff" | sha256sum --check - ;; \
+         3.1b)    echo "f9efcbdcd7048b549141ca06be435dbc142d99fefc06464995aea650f778d480  ./tmux-3.1b-fix.diff"              | sha256sum --check - ;; \
+         HEAD)    echo "8edfe9fffa4ecc7d96635940309d45404ca679ba7ca9fa2798e8326e890dee1f  ./tmux-HEAD-$HEAD_COMMIT-fix.diff" | sha256sum --check - ;; \
          *)       false ;; \
        esac
 
