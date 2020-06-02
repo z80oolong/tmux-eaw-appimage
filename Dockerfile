@@ -203,10 +203,10 @@ RUN rm -rf /usr/local/tmux/archive/* && rm -rf /usr/local/tmux/workdir/*
 
 ## check --build-arg
 
-ARG VERSION=3.1a
+ARG VERSION=3.1b
 
 ENV RELEASE_TAG=$VERSION
-ENV HEAD_COMMIT=a08f1c8c
+ENV HEAD_COMMIT=191a8365
 
 ## download the source code of tmux-$VERSION
 
@@ -252,7 +252,7 @@ RUN cd /usr/local/tmux/archive \
          3.1)     echo "f9efcbdcd7048b549141ca06be435dbc142d99fefc06464995aea650f778d480  ./tmux-3.1-fix.diff"               | sha256sum --check - ;; \
          3.1a)    echo "f9efcbdcd7048b549141ca06be435dbc142d99fefc06464995aea650f778d480  ./tmux-3.1a-fix.diff"              | sha256sum --check - ;; \
          3.1b)    echo "f9efcbdcd7048b549141ca06be435dbc142d99fefc06464995aea650f778d480  ./tmux-3.1b-fix.diff"              | sha256sum --check - ;; \
-         HEAD)    echo "8edfe9fffa4ecc7d96635940309d45404ca679ba7ca9fa2798e8326e890dee1f  ./tmux-HEAD-$HEAD_COMMIT-fix.diff" | sha256sum --check - ;; \
+         HEAD)    echo "e126de02b0ec9b9f467d793aaa4c1084bd9982d0256ac5af7bbe78a428bd7cf9  ./tmux-HEAD-$HEAD_COMMIT-fix.diff" | sha256sum --check - ;; \
          *)       false ;; \
        esac
 

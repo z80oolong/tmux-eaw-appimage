@@ -34,10 +34,10 @@ while getopts ":vhr-:" opt; do
 done
 
 if [ "x$RELEASE" = "x" ]; then
-  export RELEASE="3.1a"
+  export RELEASE="3.1b"
 fi
 
-export HEAD_COMMIT="a08f1c8c"
+export HEAD_COMMIT="191a8365"
 
 mkdir -p ./opt/releases
 
