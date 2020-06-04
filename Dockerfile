@@ -38,7 +38,7 @@ RUN mkdir -p /usr/local/tmux/archive && mkdir -p /usr/local/tmux/workdir
 
 RUN cd /usr/local/tmux/archive \
     && wget -O ./linuxdeploy-x86_64.AppImage https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage \
-    && echo "e46f64977f9d9bc01bcb22d1f1412dfe96cd1487a08c933d091c3f7cba8915fd  ./linuxdeploy-x86_64.AppImage" | sha256sum --check -
+    && echo "c94b9178de17c075e81d609b166622409a4cebd4b2dcc04f8074072149beaf03  ./linuxdeploy-x86_64.AppImage" | sha256sum --check -
 
 RUN cd /usr/local \
     && chmod +x ./tmux/archive/linuxdeploy-x86_64.AppImage \
