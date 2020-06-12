@@ -34,6 +34,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /usr/local/tmux/archive && mkdir -p /usr/local/tmux/workdir 
 
+
 ## install linuxdeploy
 
 RUN cd /usr/local/tmux/archive \
@@ -164,12 +165,15 @@ RUN cd /usr/local/tmux/workdir \
 ## install ncurses
 
 RUN cd /usr/local/tmux/archive \
-    && wget -O ./ncurses-6.1.tar.gz https://ftpmirror.gnu.org/ncurses/ncurses-6.1.tar.gz \
-    && echo "aa057eeeb4a14d470101eff4597d5833dcef5965331be3528c08d99cebaa0d17  ./ncurses-6.1.tar.gz" | sha256sum --check -
+    && wget -O ./ncurses-6.2.tar.gz https://ftpmirror.gnu.org/ncurses/ncurses-6.2.tar.gz \
+    && echo "30306e0c76e0f9f1f0de987cf1c82a5c21e1ce6568b9227f7da5b71cbea86c9d  ./ncurses-6.2.tar.gz" | sha256sum --check -
+
+COPY ./diff/tmux-ncurses@6.2-fix.diff /usr/local/tmux/archive
 
 RUN cd /usr/local/tmux/workdir \
-    && tar -xvf ../archive/ncurses-6.1.tar.gz \
-    && cd ncurses-6.1 \
+    && tar -xvf ../archive/ncurses-6.2.tar.gz \
+    && cd ncurses-6.2 \
+    && patch -p1 < ../../archive/tmux-ncurses@6.2-fix.diff \
     && mkdir ./build && cd ./build \
     && /usr/bin/env LD_RUN_PATH="" LIBRARY_PATH="" PKG_CONFIG_PATH="" PKG_CONFIG_LIBDIR="" \
                     CFLAGS="-I/usr/local/include" CPPFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" \
@@ -206,7 +210,7 @@ RUN rm -rf /usr/local/tmux/archive/* && rm -rf /usr/local/tmux/workdir/*
 ARG VERSION=3.1b
 
 ENV RELEASE_TAG=$VERSION
-ENV HEAD_COMMIT=191a8365
+ENV HEAD_COMMIT=208d9449
 
 ## download the source code of tmux-$VERSION
 
@@ -216,9 +220,6 @@ RUN cd /usr/local/tmux/archive \
          *)       wget -O ./tmux-$RELEASE_TAG.tar.gz https://github.com/tmux/tmux/releases/download/$RELEASE_TAG/tmux-$RELEASE_TAG.tar.gz ;; \
        esac \
     && case "$RELEASE_TAG" in \
-         2.3)     echo "55313e132f0f42de7e020bf6323a1939ee02ab79c48634aa07475db41573852b  ./tmux-2.3.tar.gz"     | sha256sum --check - ;; \
-         2.4)     echo "757d6b13231d0d9dd48404968fc114ac09e005d475705ad0cd4b7166f799b349  ./tmux-2.4.tar.gz"     | sha256sum --check - ;; \
-         2.5)     echo "ae135ec37c1bf6b7750a84e3a35e93d91033a806943e034521c8af51b12d95df  ./tmux-2.5.tar.gz"     | sha256sum --check - ;; \
          2.6)     echo "b17cd170a94d7b58c0698752e1f4f263ab6dc47425230df7e53a6435cc7cd7e8  ./tmux-2.6.tar.gz"     | sha256sum --check - ;; \
          2.7)     echo "9ded7d100313f6bc5a87404a4048b3745d61f2332f99ec1400a7c4ed9485d452  ./tmux-2.7.tar.gz"     | sha256sum --check - ;; \
          2.8)     echo "7f6bf335634fafecff878d78de389562ea7f73a7367f268b66d37ea13617a2ba  ./tmux-2.8.tar.gz"     | sha256sum --check - ;; \
@@ -233,28 +234,9 @@ RUN cd /usr/local/tmux/archive \
          *)       false ;; \
        esac
 
-RUN cd /usr/local/tmux/archive \
-    && case "$RELEASE_TAG" in \
-         HEAD) wget -O ./tmux-HEAD-$HEAD_COMMIT-fix.diff https://raw.githubusercontent.com/z80oolong/tmux-eaw-fix/master/tmux-HEAD-$HEAD_COMMIT-fix.diff ;; \
-         *)    wget -O ./tmux-$RELEASE_TAG-fix.diff  https://raw.githubusercontent.com/z80oolong/tmux-eaw-fix/master/tmux-$RELEASE_TAG-fix.diff  ;; \
-       esac \
-    && case "$RELEASE_TAG" in \
-         2.3)     echo "1e2a5dae47fd72c4daf4a398c0c7735cbfa4a607bf83b1ae96c9cef92310a6a9  ./tmux-2.3-fix.diff"               | sha256sum --check - ;; \
-         2.4)     echo "f38f3042385bf464eb52a72e2d71897fd101098bb5ccabd725fad8a35f75dc20  ./tmux-2.4-fix.diff"               | sha256sum --check - ;; \
-         2.5)     echo "f34a7c1e59ed0b58990ddcc878e192c3e8ad86dbb2046d723ba5a324fe0d8063  ./tmux-2.5-fix.diff"               | sha256sum --check - ;; \
-         2.6)     echo "04266939b43cad4f08136890103ea073e8f9f0c494080b9a5a612b26f0bdf0d9  ./tmux-2.6-fix.diff"               | sha256sum --check - ;; \
-         2.7)     echo "c16bb71d87c9d320676beb7bca9a1b4d69a14d3b747b3b2106f2dfa67e94dc12  ./tmux-2.7-fix.diff"               | sha256sum --check - ;; \
-         2.8)     echo "23256a8df82b80d598c3bb1090f839de9195f2027613bdf11fb63b3bcbba9f76  ./tmux-2.8-fix.diff"               | sha256sum --check - ;; \
-         2.9)     echo "148bbe3a4f86dcd9c4528f4e898a2def93c50cef3c12f512c69ef27473f45187  ./tmux-2.9-fix.diff"               | sha256sum --check - ;; \
-         2.9a)    echo "148bbe3a4f86dcd9c4528f4e898a2def93c50cef3c12f512c69ef27473f45187  ./tmux-2.9a-fix.diff"              | sha256sum --check - ;; \
-         3.0)     echo "b5e994fc07d96b6bafcaa2dd984274662bd73f7cb4a916a4048ac0757bf7c97e  ./tmux-3.0-fix.diff"               | sha256sum --check - ;; \
-         3.0a)    echo "d223ddc4d7621416ae0f8ac874155bc963a16365ada9598eff74129141ad7948  ./tmux-3.0a-fix.diff"              | sha256sum --check - ;; \
-         3.1)     echo "f9efcbdcd7048b549141ca06be435dbc142d99fefc06464995aea650f778d480  ./tmux-3.1-fix.diff"               | sha256sum --check - ;; \
-         3.1a)    echo "f9efcbdcd7048b549141ca06be435dbc142d99fefc06464995aea650f778d480  ./tmux-3.1a-fix.diff"              | sha256sum --check - ;; \
-         3.1b)    echo "f9efcbdcd7048b549141ca06be435dbc142d99fefc06464995aea650f778d480  ./tmux-3.1b-fix.diff"              | sha256sum --check - ;; \
-         HEAD)    echo "e126de02b0ec9b9f467d793aaa4c1084bd9982d0256ac5af7bbe78a428bd7cf9  ./tmux-HEAD-$HEAD_COMMIT-fix.diff" | sha256sum --check - ;; \
-         *)       false ;; \
-       esac
+## copy tmux-{2.6, 2.7, ..., $VERSION, HEAD-$HEAD_COMMIT-fix.diff to /usr/local/tmux/archive
+
+COPY ./diff/tmux-*-fix.diff /usr/local/tmux/archive/
 
 ## build tmux-$RELEASE_TAG
 
@@ -284,6 +266,7 @@ RUN rm -rf /usr/local/tmux/archive/* && rm -rf /usr/local/tmux/workdir/*
 ## build tmux-eaw-$RELEASE_TAG-x86_64.ApppImage
 
 ## complete the appimage build.
+
 COPY ./opt/AppRun ./opt/build.sh ./opt/tmux-logo-square.png ./opt/tmux.desktop /opt/
 RUN /opt/build.sh
 
