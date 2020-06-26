@@ -210,13 +210,14 @@ RUN rm -rf /usr/local/tmux/archive/* && rm -rf /usr/local/tmux/workdir/*
 ARG VERSION=3.1b
 
 ENV RELEASE_TAG=$VERSION
-ENV HEAD_COMMIT=208d9449
+ENV HEAD_COMMIT=2a2ebf31
 
 ## download the source code of tmux-$VERSION
 
 RUN cd /usr/local/tmux/archive \
     && case "$RELEASE_TAG" in \
          HEAD)    true ;; \
+         3.2-rc)  wget -O ./tmux-$RELEASE_TAG.tar.gz https://github.com/tmux/tmux/releases/download/3.2/tmux-$RELEASE_TAG.tar.gz ;; \
          *)       wget -O ./tmux-$RELEASE_TAG.tar.gz https://github.com/tmux/tmux/releases/download/$RELEASE_TAG/tmux-$RELEASE_TAG.tar.gz ;; \
        esac \
     && case "$RELEASE_TAG" in \
@@ -230,6 +231,7 @@ RUN cd /usr/local/tmux/archive \
          3.1)     echo "979bf38db2c36193de49149aaea5c540d18e01ccc27cf76e2aff5606bd186722  ./tmux-3.1.tar.gz"     | sha256sum --check - ;; \
          3.1a)    echo "10687cbb02082b8b9e076cf122f1b783acc2157be73021b4bedb47e958f4e484  ./tmux-3.1a.tar.gz"    | sha256sum --check - ;; \
          3.1b)    echo "d93f351d50af05a75fe6681085670c786d9504a5da2608e481c47cf5e1486db9  ./tmux-3.1b.tar.gz"    | sha256sum --check - ;; \
+         3.2-rc)  echo "626d17dcebf3f0e8d4f9c305ee285552d65d0a8206069cf176d3052ba937b4c6  ./tmux-3.2-rc.tar.gz"  | sha256sum --check - ;; \
          HEAD)    true  ;; \
          *)       false ;; \
        esac

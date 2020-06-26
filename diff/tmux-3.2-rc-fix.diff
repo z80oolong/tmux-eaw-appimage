@@ -1,5 +1,5 @@
 diff --git a/options-table.c b/options-table.c
-index 0555d43e..05e901a4 100644
+index 0555d43..05e901a 100644
 --- a/options-table.c
 +++ b/options-table.c
 @@ -1068,6 +1068,38 @@ const struct options_table_entry options_table[] = {
@@ -42,7 +42,7 @@ index 0555d43e..05e901a4 100644
  	OPTIONS_TABLE_HOOK("after-bind-key", ""),
  	OPTIONS_TABLE_HOOK("after-capture-pane", ""),
 diff --git a/tmux.c b/tmux.c
-index b9a676a2..c2e2df1c 100644
+index b9a676a..c2e2df1 100644
 --- a/tmux.c
 +++ b/tmux.c
 @@ -321,19 +321,28 @@ main(int argc, char **argv)
@@ -109,7 +109,7 @@ index b9a676a2..c2e2df1c 100644
  	exit(client_main(osdep_event_init(), argc, argv, flags, feat));
  }
 diff --git a/tmux.h b/tmux.h
-index dff79a83..777b0914 100644
+index d128fd8..197d4b3 100644
 --- a/tmux.h
 +++ b/tmux.h
 @@ -69,6 +69,10 @@ struct winlink;
@@ -124,7 +124,7 @@ index dff79a83..777b0914 100644
  #ifndef TMUX_CONF
  #define TMUX_CONF "/etc/tmux.conf:~/.tmux.conf"
 diff --git a/tty-acs.c b/tty-acs.c
-index 63eccb93..7729eca5 100644
+index 63eccb9..7729eca 100644
 --- a/tty-acs.c
 +++ b/tty-acs.c
 @@ -23,6 +23,130 @@
@@ -413,7 +413,7 @@ index 63eccb93..7729eca5 100644
 +#endif
  }
 diff --git a/tty-term.c b/tty-term.c
-index 9ad88597..e1457ab6 100644
+index 9ad8859..e1457ab 100644
 --- a/tty-term.c
 +++ b/tty-term.c
 @@ -603,6 +603,15 @@ tty_term_create(struct tty *tty, char *name, int *feat, int fd, char **cause)
@@ -441,7 +441,7 @@ index 9ad88597..e1457ab6 100644
  	/* Log the capabilities. */
  	for (i = 0; i < tty_term_ncodes(); i++)
 diff --git a/utf8.c b/utf8.c
-index 5ba41e9a..aaf53c08 100644
+index 5ba41e9..aaf53c0 100644
 --- a/utf8.c
 +++ b/utf8.c
 @@ -26,6 +26,407 @@

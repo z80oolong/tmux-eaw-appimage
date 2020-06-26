@@ -37,7 +37,7 @@ if [ "x$RELEASE" = "x" ]; then
   export RELEASE="3.1b"
 fi
 
-export HEAD_COMMIT="208d9449"
+export HEAD_COMMIT="2a2ebf31"
 
 mkdir -p ./opt/releases
 
