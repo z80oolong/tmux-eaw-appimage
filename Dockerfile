@@ -5,16 +5,12 @@
 FROM debian:jessie
 MAINTAINER Z.OOL. (NAKATSUKA, Yukitaka) <zool@zool.jpn.org>
 
-## setup environment variables to build tmux.
+## setup Debian Jessie environment.
 
 ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 ENV DEBIAN_FRONTEND=noninterractive
 
-## apt-get update && apt-get upgrade
-
-RUN /usr/bin/env LANG=C apt-get update && /usr/bin/env LANG=C apt-get upgrade
-
-## install and setup locale
+RUN /usr/bin/env LANG=C apt-get update && /usr/bin/env LANG=C apt-get upgrade -y --no-install-recommends
 
 RUN apt-get install -y --no-install-recommends apt-utils locales \
     && echo "en_US.UTF-8 UTF-8" >  /etc/locale.gen \
@@ -22,257 +18,88 @@ RUN apt-get install -y --no-install-recommends apt-utils locales \
     && /usr/sbin/locale-gen \
     && update-locale LANG=ja_JP.UTF-8
 
-## install build-essential and etc.
+## install package required by Linuxbrew.
 
-RUN apt-get install -y --no-install-recommends build-essential wget gawk unzip file git ca-certificates
+RUN apt-get install -y --no-install-recommends build-essential coreutils curl wget file git sudo ca-certificates
 
 ## clean /var/cache/apt/archives/* and /var/lib/apt/lists/*
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-## setup working directory.
-
-RUN mkdir -p /usr/local/tmux/archive && mkdir -p /usr/local/tmux/workdir 
-
-
 ## install linuxdeploy
 
-RUN cd /usr/local/tmux/archive \
+RUN cd /usr/local/src \
     && wget -O ./linuxdeploy-x86_64.AppImage https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage \
-    && echo "c94b9178de17c075e81d609b166622409a4cebd4b2dcc04f8074072149beaf03  ./linuxdeploy-x86_64.AppImage" | sha256sum --check -
+    && echo "99202da2806cc3e522793fbc447b33ce5599440dc22c1ec6db4dba3e4ee1e3aa  ./linuxdeploy-x86_64.AppImage" | sha256sum --check -
 
 RUN cd /usr/local \
-    && chmod +x ./tmux/archive/linuxdeploy-x86_64.AppImage \
-    && ./tmux/archive/linuxdeploy-x86_64.AppImage --appimage-extract \
+    && chmod +x ./src/linuxdeploy-x86_64.AppImage \
+    && ./src/linuxdeploy-x86_64.AppImage --appimage-extract \
     && cd /usr/local/bin \
     && ln -nfs ../squashfs-root/usr/bin/linuxdeploy ./linuxdeploy
 
-## install m4
+## create user "linuxbrew".
 
-RUN cd /usr/local/tmux/archive \
-    && wget -O ./m4-1.4.18.tar.xz https://ftp.gnu.org/gnu/m4/m4-1.4.18.tar.xz \
-    && echo "f2c1e86ca0a404ff281631bdc8377638992744b175afb806e25871a24a934e07  ./m4-1.4.18.tar.xz" | sha256sum --check -
+RUN localedef -i en_US -f UTF-8 en_US.UTF-8 && useradd -m -s /bin/bash linuxbrew \
+    && echo 'linuxbrew ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
 
-RUN cd /usr/local/tmux/workdir \
-    && tar -xvf ../archive/m4-1.4.18.tar.xz \
-    && cd m4-1.4.18 \
-    && mkdir ./build && cd ./build \
-    && /usr/bin/env LD_RUN_PATH="" LIBRARY_PATH="" PKG_CONFIG_PATH="" PKG_CONFIG_LIBDIR="" \
-                    CFLAGS="-I/usr/local/include" CPPFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" \
-                    ../configure --prefix=/usr/local --disable-dependency-tracking --disable-silent-rules --disable-debug \
-    && make -j5 \
-    && make install
+## install Linuxbrew environment.
 
-## install autoconf
+USER linuxbrew
+WORKDIR /home/linuxbrew
 
-RUN cd /usr/local/tmux/archive \
-    && wget -O ./autoconf-2.69.tar.gz https://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz \
-    && echo "954bd69b391edc12d6a4a51a2dd1476543da5c6bbf05a95b59dc0dd6fd4c2969  ./autoconf-2.69.tar.gz" | sha256sum --check -
+RUN echo "" | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
-RUN cd /usr/local/tmux/workdir \
-    && tar -xvf ../archive/autoconf-2.69.tar.gz \
-    && cd autoconf-2.69 \
-    && mkdir ./build && cd ./build \
-    && /usr/bin/env LD_RUN_PATH="" LIBRARY_PATH="" PKG_CONFIG_PATH="" PKG_CONFIG_LIBDIR="" \
-                    CFLAGS="-I/usr/local/include" CPPFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" \
-                    ../configure --prefix=/usr/local --disable-dependency-tracking --disable-silent-rules --disable-debug \
-    && make -j5 \
-    && make install
+ENV SHELL=/bin/bash
+ENV USER=linuxbrew
 
-## install automake
+ENV HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
+ENV HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar"
+ENV HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX/Homebrew"
+ENV PATH="$HOMEBREW_PREFIX/sbin:$HOMEBREW_PREFIX/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ENV MANPATH="$HOMEBREW_PREFIX/share/man"
+ENV INFOPATH="$HOMEBREW_PREFIX/share/info"
 
-RUN cd /usr/local/tmux/archive \
-    && wget -O ./automake-1.16.1.tar.xz https://ftp.gnu.org/gnu/automake/automake-1.16.1.tar.xz \
-    && echo "5d05bb38a23fd3312b10aea93840feec685bdf4a41146e78882848165d3ae921  ./automake-1.16.1.tar.xz" | sha256sum --check -
+ENV HOMEBREW_NO_ANALYTICS=1
+ENV HOMEBREW_NO_AUTO_UPDATE=1
+ENV HOMEBREW_MAKE_JOBS=6
 
-RUN cd /usr/local/tmux/workdir \
-    && tar -xvf ../archive/automake-1.16.1.tar.xz \
-    && cd automake-1.16.1 \
-    && mkdir ./build && cd ./build \
-    && /usr/bin/env LD_RUN_PATH="" LIBRARY_PATH="" PKG_CONFIG_PATH="" PKG_CONFIG_LIBDIR="" \
-                    CFLAGS="-I/usr/local/include" CPPFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" \
-                    ../configure --prefix=/usr/local --disable-dependency-tracking --disable-silent-rules --disable-debug \
-    && make -j5 \
-    && make install
+## install autoconf, automake, libtool, etc.
 
-## install libtool
+RUN brew install patchelf m4 gdbm libbsd berkeley-db expat
+RUN brew install -s perl
+RUN brew install autoconf automake libtool pkg-config bison
+RUN brew install bzip2 unzip gpatch
 
-RUN cd /usr/local/tmux/archive \
-    && wget -O ./libtool-2.4.6.tar.xz https://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.xz \
-    && echo "7c87a8c2c8c0fc9cd5019e402bed4292462d00a718a7cd5f11218153bf28b26f  ./libtool-2.4.6.tar.xz" | sha256sum --check -
+## brew tap z80oolong/tmux and install tmux dependencies.
 
-RUN cd /usr/local/tmux/workdir \
-    && tar -xvf ../archive/libtool-2.4.6.tar.xz \
-    && cd libtool-2.4.6 \
-    && mkdir ./build && cd ./build \
-    && /usr/bin/env LD_RUN_PATH="" LIBRARY_PATH="" PKG_CONFIG_PATH="" PKG_CONFIG_LIBDIR="" \
-                    CFLAGS="-I/usr/local/include" CPPFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" \
-                    ../configure --prefix=/usr/local --disable-dependency-tracking --disable-silent-rules --disable-debug --enable-ltdl-install \
-    && make -j5 \
-    && make install
+RUN brew tap z80oolong/tmux
+RUN brew install -s z80oolong/tmux/tmux-libevent@2.2 z80oolong/tmux/tmux-ncurses@6.2
 
-## install pkgconfig
+ARG BREW_UPDATE=no
+RUN [ "x$BREW_UPDATE" != "xno" ] && brew update && brew upgrade || true
 
-RUN cd /usr/local/tmux/archive \
-    && wget -O ./pkg-config-0.29.2.tar.gz https://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz \
-    && echo "6fc69c01688c9458a57eb9a1664c9aba372ccda420a02bf4429fe610e7e7d591  ./pkg-config-0.29.2.tar.gz" | sha256sum --check -
+## brew install z80oolong/tmux/tmux@RELEASE_TAG
 
-RUN cd /usr/local/tmux/workdir \
-    && tar -xvf ../archive/pkg-config-0.29.2.tar.gz \
-    && cd pkg-config-0.29.2 \
-    && mkdir ./build && cd ./build \
-    && /usr/bin/env LD_RUN_PATH="" LIBRARY_PATH="" PKG_CONFIG_PATH="" PKG_CONFIG_LIBDIR="" \
-                    CFLAGS="-I/usr/local/include" CPPFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" \
-                    ../configure --prefix=/usr/local --disable-dependency-tracking --disable-silent-rules --disable-debug --disable-host-tool \
-		                 --with-internal-glib --with-pc-path=/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig \
-    && make -j5 \
-    && make install
+ARG TMUX_RELEASE=3.1b
+ENV RELEASE_TAG=$TMUX_RELEASE
 
-## install bison
+COPY ./opt/tmux@3.2-dev.rb $HOMEBREW_PREFIX/Homebrew/Library/Taps/z80oolong/homebrew-tmux/Formula/
 
-RUN cd /usr/local/tmux/archive \
-    && wget -O ./bison-3.4.2.tar.xz https://ftp.gnu.org/gnu/bison/bison-3.4.2.tar.xz \
-    && echo "27d05534699735dc69e86add5b808d6cb35900ad3fd63fa82e3eb644336abfa0  ./bison-3.4.2.tar.xz" | sha256sum --check -
-
-RUN cd /usr/local/tmux/workdir \
-    && tar -xvf ../archive/bison-3.4.2.tar.xz \
-    && cd bison-3.4.2 \
-    && mkdir ./build && cd ./build \
-    && /usr/bin/env LD_RUN_PATH="" LIBRARY_PATH="" PKG_CONFIG_PATH="" PKG_CONFIG_LIBDIR="" \
-                    CFLAGS="-I/usr/local/include" CPPFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" \
-                    ../configure --prefix=/usr/local --disable-dependency-tracking --disable-silent-rules --disable-debug \
-    && make \
-    && make install
-
-## install libevent
-
-RUN cd /usr/local/tmux/archive \
-    && wget -O ./libevent-f0b3160f.zip https://github.com/libevent/libevent/archive/f0b3160f8ce7fbd411493dcd023f562f4f9d17ee.zip \
-    && echo "cdbfaf9d1d7a7b66319e6a51030e2da8ac3c603f4ca655995e9e05faf1d7b796  ./libevent-f0b3160f.zip" | sha256sum --check -
-
-RUN cd /usr/local/tmux/workdir \
-    && unzip ../archive/libevent-f0b3160f.zip \
-    && mv libevent-f0b3160f8ce7fbd411493dcd023f562f4f9d17ee libevent-f0b3160f \
-    && cd libevent-f0b3160f \
-    && sed -i.bak -e 's/^#pragma GCC diagnostic .*$//g' ./sample/watch-timing.c \
-    && ./autogen.sh \
-    && /usr/bin/env LD_RUN_PATH="" LIBRARY_PATH="" PKG_CONFIG_PATH="" PKG_CONFIG_LIBDIR="" \
-                    CFLAGS="-I/usr/local/include" CPPFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" \
-                    ./configure --prefix=/usr/local --disable-dependency-tracking --disable-silent-rules --disable-openssl --disable-debug \
-    && make -j5 \
-    && make install
-
-## install ncurses
-
-RUN cd /usr/local/tmux/archive \
-    && wget -O ./ncurses-6.2.tar.gz https://ftpmirror.gnu.org/ncurses/ncurses-6.2.tar.gz \
-    && echo "30306e0c76e0f9f1f0de987cf1c82a5c21e1ce6568b9227f7da5b71cbea86c9d  ./ncurses-6.2.tar.gz" | sha256sum --check -
-
-COPY ./diff/tmux-ncurses@6.2-fix.diff /usr/local/tmux/archive
-
-RUN cd /usr/local/tmux/workdir \
-    && tar -xvf ../archive/ncurses-6.2.tar.gz \
-    && cd ncurses-6.2 \
-    && patch -p1 < ../../archive/tmux-ncurses@6.2-fix.diff \
-    && mkdir ./build && cd ./build \
-    && /usr/bin/env LD_RUN_PATH="" LIBRARY_PATH="" PKG_CONFIG_PATH="" PKG_CONFIG_LIBDIR="" \
-                    CFLAGS="-I/usr/local/include" CPPFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" \
-                    ../configure --prefix=/usr/local --datarootdir=/usr/local/share \
-		                 --disable-dependency-tracking --disable-silent-rules --disable-debug \
-		                 --enable-pc-files --enable-sigwinch --enable-symlinks --enable-widec --with-shared --with-gpm=no \
-    && make -j5 \
-    && make install \
-    && cd /usr/local/lib \
-    && ln -sf libformw.so.6 libform.so.6 && ln -sf libformw.so.6 libform.so \
-    && ln -sf libmenuw.so.6 libmenu.so.6 && ln -sf libmenuw.so.6 libmenu.so \
-    && ln -sf libncursesw.so.6 libncurses.so.6 && ln -sf libncursesw.so.6 libncurses.so \
-    && ln -sf libpanelw.so.6 libpanel.so.6 && ln -sf libpanelw.so.6 libpanel.so \
-    && ln -sf libformw.a libform.a && ln -sf libformw_g.a libform_g.a \
-    && ln -sf libmenuw.a libmenu.a && ln -sf libmenuw_g.a libmenu_g.a \
-    && ln -sf libncursesw.a libncurses.a && ln -sf libncursesw_g.a libncurses_g.a \
-    && ln -sf libpanelw.a libpanel.a && ln -sf libpanelw_g.a libpanel_g.a \
-    && ln -sf libncurses++w.a libncurses++.a && ln -sf libncurses.a libcurses.a \
-    && ln -sf libncurses.so libcurses.so && ln -sf libncurses.so libtermcap.so \
-    && ln -sf libncurses.so libtinfo.so \
-    && cd /usr/local/bin \
-    && ln -sf ncursesw6-config ncurses6-config \
-    && cd /usr/local/include \
-    && ln -sf ncursesw/curses.h curses.h && ln -sf ncursesw/form.h form.h \
-    && ln -sf ncursesw/ncurses.h ncurses.h && ln -sf ncursesw/panel.h panel.h \
-    && ln -sf ncursesw/term.h term.h && ln -sf ncursesw/termcap.h termcap.h
-
-## clean /usr/local/tmux/archive and /usr/local/tmux/workdir
-
-RUN rm -rf /usr/local/tmux/archive/* && rm -rf /usr/local/tmux/workdir/*
-
-## check --build-arg
-
-ARG VERSION=3.1b
-
-ENV RELEASE_TAG=$VERSION
-ENV HEAD_COMMIT=2a2ebf31
-
-## download the source code of tmux-$VERSION
-
-RUN cd /usr/local/tmux/archive \
-    && case "$RELEASE_TAG" in \
-         HEAD)    true ;; \
-         3.2-rc)  wget -O ./tmux-$RELEASE_TAG.tar.gz https://github.com/tmux/tmux/releases/download/3.2/tmux-$RELEASE_TAG.tar.gz ;; \
-         *)       wget -O ./tmux-$RELEASE_TAG.tar.gz https://github.com/tmux/tmux/releases/download/$RELEASE_TAG/tmux-$RELEASE_TAG.tar.gz ;; \
-       esac \
-    && case "$RELEASE_TAG" in \
-         2.6)     echo "b17cd170a94d7b58c0698752e1f4f263ab6dc47425230df7e53a6435cc7cd7e8  ./tmux-2.6.tar.gz"     | sha256sum --check - ;; \
-         2.7)     echo "9ded7d100313f6bc5a87404a4048b3745d61f2332f99ec1400a7c4ed9485d452  ./tmux-2.7.tar.gz"     | sha256sum --check - ;; \
-         2.8)     echo "7f6bf335634fafecff878d78de389562ea7f73a7367f268b66d37ea13617a2ba  ./tmux-2.8.tar.gz"     | sha256sum --check - ;; \
-         2.9)     echo "34901232f486fd99f3a39e864575e658b5d49f43289ccc6ee57c365f2e2c2980  ./tmux-2.9.tar.gz"     | sha256sum --check - ;; \ 
-         2.9a)    echo "839d167a4517a6bffa6b6074e89a9a8630547b2dea2086f1fad15af12ab23b25  ./tmux-2.9a.tar.gz"    | sha256sum --check - ;; \
-         3.0)     echo "9edcd78df80962ee2e6471a8f647602be5ded62bb41c574172bb3dc3d0b9b4b4  ./tmux-3.0.tar.gz"     | sha256sum --check - ;; \
-         3.0a)    echo "4ad1df28b4afa969e59c08061b45082fdc49ff512f30fc8e43217d7b0e5f8db9  ./tmux-3.0a.tar.gz"    | sha256sum --check - ;; \
-         3.1)     echo "979bf38db2c36193de49149aaea5c540d18e01ccc27cf76e2aff5606bd186722  ./tmux-3.1.tar.gz"     | sha256sum --check - ;; \
-         3.1a)    echo "10687cbb02082b8b9e076cf122f1b783acc2157be73021b4bedb47e958f4e484  ./tmux-3.1a.tar.gz"    | sha256sum --check - ;; \
-         3.1b)    echo "d93f351d50af05a75fe6681085670c786d9504a5da2608e481c47cf5e1486db9  ./tmux-3.1b.tar.gz"    | sha256sum --check - ;; \
-         3.2-rc)  echo "626d17dcebf3f0e8d4f9c305ee285552d65d0a8206069cf176d3052ba937b4c6  ./tmux-3.2-rc.tar.gz"  | sha256sum --check - ;; \
-         HEAD)    true  ;; \
-         *)       false ;; \
-       esac
-
-## copy tmux-{2.6, 2.7, ..., $VERSION, HEAD-$HEAD_COMMIT-fix.diff to /usr/local/tmux/archive
-
-COPY ./diff/tmux-*-fix.diff /usr/local/tmux/archive/
-
-## build tmux-$RELEASE_TAG
-
-RUN cd /usr/local/tmux/workdir \
-    && case "$RELEASE_TAG" in \
-         HEAD) git clone https://github.com/tmux/tmux.git tmux-$RELEASE_TAG && (cd tmux-$RELEASE_TAG && git checkout $HEAD_COMMIT) ;; \
-         *)    tar -xvf ../archive/tmux-$RELEASE_TAG.tar.gz ;; \
-       esac \
-    && cd tmux-$RELEASE_TAG \
-    && case "$RELEASE_TAG" in \
-         HEAD) patch -p1 < ../../archive/tmux-HEAD-$HEAD_COMMIT-fix.diff ;; \
-         *)    patch -p1 < ../../archive/tmux-$RELEASE_TAG-fix.diff  ;; \
-       esac \
-    && if [ "$RELEASE_TAG" = "HEAD" ]; then \ 
-         ./autogen.sh; \
-       fi \
-    && /usr/bin/env LD_RUN_PATH="" LIBRARY_PATH="" PKG_CONFIG_PATH="" PKG_CONFIG_LIBDIR="" \
-                    CFLAGS="-I/usr/local/include" CPPFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" \ 
-                    ./configure --prefix=/usr/local --disable-dependency-tracking --disable-silent-rules --disable-debug \
-    && make -j5 \
-    && make install
-
-## clean /usr/local/tmux/archive and /usr/local/tmux/workdir
-
-RUN rm -rf /usr/local/tmux/archive/* && rm -rf /usr/local/tmux/workdir/*
+RUN case "$RELEASE_TAG" in \
+      HEAD-*) brew install -s z80oolong/tmux/tmux@3.2-dev      && brew link --force z80oolong/tmux/tmux@3.2-dev ;; \
+      3.2-rc) brew install -s z80oolong/tmux/tmux@3.2          && brew link --force z80oolong/tmux/tmux@3.2     ;; \
+      *)      brew install -s z80oolong/tmux/tmux@$RELEASE_TAG && brew link --force z80oolong/tmux/tmux@$RELEASE_TAG ;; \
+    esac
 
 ## build tmux-eaw-$RELEASE_TAG-x86_64.ApppImage
 
-## complete the appimage build.
+USER root
 
 COPY ./opt/AppRun ./opt/build.sh ./opt/tmux-logo-square.png ./opt/tmux.desktop /opt/
 RUN /opt/build.sh
 
 ## Produces artifact
-## /opt/releases/tmux-3.0a-x86_64.AppImage
+## /opt/releases/tmux-eaw-3.0a-x86_64.AppImage
 
 CMD /opt/build.sh
