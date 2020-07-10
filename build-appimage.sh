@@ -1,10 +1,10 @@
 #!/bin/bash
 
 export RELEASE="3.1b"
-export HEAD_COMMIT="2a2ebf31"
+export HEAD_COMMIT="a5f99e14"
 export UPDATE="no"
 
-while getopts ":vhr-:" opt; do
+while getopts ":vhur-:" opt; do
   case "$opt" in
     -)
       case "${OPTARG}" in
@@ -20,14 +20,10 @@ while getopts ":vhr-:" opt; do
           shift 1
           export RELEASE=$1
           ;;
-        update)
-          shift 1
-          export UPDATE=`date +'%Y%m%d%H%M%S'`
-          ;;
       esac
       ;;
     h)
-      echo "Usage: $0 [-hv] [-r RELEASE] [-u UPDATE] [--help|--version|--release RELEASE]"
+      echo "Usage: $0 [-hvu] [-r RELEASE] [--help|--version|--update|--release RELEASE]"
       exit 0
       ;;
     v)
@@ -38,10 +34,6 @@ while getopts ":vhr-:" opt; do
       shift 1
       export RELEASE=$1
       ;;
-    u)
-      shift 1
-      export UPDATE=`date +'%Y%m%d%H%M%S'`
-      ;;
     esac
 done
 
@@ -51,7 +43,7 @@ fi
 
 mkdir -p ./opt/releases
 
-docker build . -t tmux --build-arg TMUX_RELEASE=$RELEASE --build-arg BREW_UPDATE=$UPDATE && \
+docker build . -t tmux --build-arg TMUX_RELEASE=$RELEASE --build-arg BREW_UPDATE=`date +'%Y%m%d'` && \
 docker create -ti --name tmuxcontainer tmux /bin/bash && \
 docker cp tmuxcontainer:/opt/releases/tmux-eaw-$RELEASE-x86_64.AppImage ./opt/releases && \
 docker rm -f tmuxcontainer

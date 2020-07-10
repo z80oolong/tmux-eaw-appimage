@@ -9,7 +9,7 @@ export LD_LIBRARY_PATH="$HOMEBREW_PREFIX/opt/tmux-ncurses@6.2/lib:$HOMEBREW_PREF
 export OUTPUT="/opt/releases/tmux-eaw-$RELEASE_TAG-x86_64.AppImage"
 
 case "$RELEASE_TAG" in
-  HEAD-*) RELEASE="3.2-dev"      ;;
+  HEAD-*) RELEASE="3.3-next"      ;;
   *)      RELEASE="$RELEASE_TAG" ;;
 esac
 

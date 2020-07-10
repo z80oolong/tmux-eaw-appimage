@@ -1,10 +1,10 @@
-class TmuxAT32Dev < Formula
+class TmuxAT33Next < Formula
   desc "Terminal multiplexer"
   homepage "https://tmux.github.io/"
 
-  tmux_version = "HEAD-2a2ebf31"
-  url "https://github.com/tmux/tmux/archive/2a2ebf315ff2ca2533b22c26d407cc5cf90ba325.tar.gz"
-  sha256 "c56d2e152941954a6debd0a14958518cc37f7c2932588cdf9fc91517f4a9ab68"
+  tmux_version = "HEAD-a5f99e14"
+  url "https://github.com/tmux/tmux.git"
+  head "https://github.com/tmux/tmux.git", :commit => "a5f99e14c6f264e568b860692b89d11f5298a3f2"
   version tmux_version
 
   keg_only :versioned_formula
@@ -26,9 +26,9 @@ class TmuxAT32Dev < Formula
     sha256 "05e79fc1ecb27637dc9d6a52c315b8f207cf010cdcee9928805525076c9020ae"
   end
 
-  diff_file = Tap.fetch("z80oolong/tmux").path/"diff/tmux-HEAD-2a2ebf31-fix.diff"
+  diff_file = Tap.fetch("z80oolong/tmux").path/"diff/tmux-HEAD-a5f99e14-fix.diff"
   unless diff_file.exist? then
-    diff_file = Formula["z80oolong/tmux/#{name}"].opt_prefix/".brew/tmux-HEAD-2a2ebf31-fix.diff"
+    diff_file = Formula["z80oolong/tmux/#{name}"].opt_prefix/".brew/tmux-HEAD-a5f99e14-fix.diff"
   end
   patch :p1, diff_file.open.gets(nil)
 
@@ -41,6 +41,7 @@ class TmuxAT32Dev < Formula
     ENV.append "LDFLAGS",  "-L#{Formula["z80oolong/tmux/tmux-ncurses@6.2"].opt_lib}"
 
     ENV.append "CPPFLAGS", "-DNO_USE_UTF8CJK" if build.without?("utf8-cjk")
+    ENV.append "CPPFLAGS", "-DNO_USE_UTF8CJK_EMOJI" if build.without?("utf8-cjk-emoji")
     ENV.append "CPPFLAGS", "-DNO_USE_PANE_BORDER_ACS_ASCII" if build.without?("pane-border-acs-ascii")
 
     system "sh", "autogen.sh"
@@ -64,7 +65,7 @@ class TmuxAT32Dev < Formula
   end
 
   def post_install
-    system "install", "-m", "0444", Tap.fetch("z80oolong/tmux").path/"diff/tmux-#{version}-fix.diff", "#{prefix}/.brew"
+    system "install", "-m", "0444", Tap.fetch("z80oolong/tmux").path/"diff/tmux-HEAD-a5f99e14-fix.diff", "#{prefix}/.brew"
   end
 
   def fix_rpath(binname, append_list, delete_list)

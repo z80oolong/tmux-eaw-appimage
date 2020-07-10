@@ -71,10 +71,12 @@ RUN brew install -s perl
 RUN brew install autoconf automake libtool pkg-config bison
 RUN brew install bzip2 unzip gpatch
 
-## brew tap z80oolong/tmux and install tmux dependencies.
+## brew tap z80oolong/tmux and install z80oolong/tmux/tmux@$RELEASE_TAG dependencies.
 
 RUN brew tap z80oolong/tmux
 RUN brew install -s z80oolong/tmux/tmux-libevent@2.2 z80oolong/tmux/tmux-ncurses@6.2
+
+## brew update && brew upgrade
 
 ARG BREW_UPDATE=no
 RUN [ "x$BREW_UPDATE" != "xno" ] && brew update && brew upgrade || true
@@ -84,12 +86,13 @@ RUN [ "x$BREW_UPDATE" != "xno" ] && brew update && brew upgrade || true
 ARG TMUX_RELEASE=3.1b
 ENV RELEASE_TAG=$TMUX_RELEASE
 
-COPY ./opt/tmux@3.2-dev.rb $HOMEBREW_PREFIX/Homebrew/Library/Taps/z80oolong/homebrew-tmux/Formula/
+#COPY ./opt/tmux@3.2-dev.rb $HOMEBREW_PREFIX/Homebrew/Library/Taps/z80oolong/homebrew-tmux/Formula/
+COPY ./opt/tmux@3.3-next.rb /home/linuxbrew/
 
 RUN case "$RELEASE_TAG" in \
-      HEAD-*) brew install -s z80oolong/tmux/tmux@3.2-dev      && brew link --force z80oolong/tmux/tmux@3.2-dev ;; \
-      3.2-rc) brew install -s z80oolong/tmux/tmux@3.2          && brew link --force z80oolong/tmux/tmux@3.2     ;; \
-      *)      brew install -s z80oolong/tmux/tmux@$RELEASE_TAG && brew link --force z80oolong/tmux/tmux@$RELEASE_TAG ;; \
+      HEAD-*) brew install -s --HEAD /home/linuxbrew/tmux@3.3-next.rb && brew link --force tmux@3.3-next ;; \
+      3.2-rc) brew install -s z80oolong/tmux/tmux@3.2                 && brew link --force z80oolong/tmux/tmux@3.2     ;; \
+      *)      brew install -s z80oolong/tmux/tmux@$RELEASE_TAG        && brew link --force z80oolong/tmux/tmux@$RELEASE_TAG ;; \
     esac
 
 ## build tmux-eaw-$RELEASE_TAG-x86_64.ApppImage
@@ -100,6 +103,6 @@ COPY ./opt/AppRun ./opt/build.sh ./opt/tmux-logo-square.png ./opt/tmux.desktop /
 RUN /opt/build.sh
 
 ## Produces artifact
-## /opt/releases/tmux-eaw-3.0a-x86_64.AppImage
+## /opt/releases/tmux-eaw-$RELEASE_TAG-x86_64.AppImage
 
 CMD /opt/build.sh
