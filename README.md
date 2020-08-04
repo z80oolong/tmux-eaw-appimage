@@ -1,18 +1,22 @@
-# tmux-eaw-appimage -- EAW 対応 tmux を起動する AppImage ファイル作成用の Dockerfile
+# tmux-eaw-appimage -- EAW 対応 tmux を起動する AppImage パッケージファイル作成用の Dockerfile
 
 ## 概要
 
 [tmux 2.5][TMUX] 以降において、 Unicode の規格における東アジア圏の各種文字のうち、いわゆる "◎" や "★" 等の記号文字及び罫線文字等、 [East_Asian_Width 特性の値が A (Ambiguous) となる文字][EAWA] (以下、 [East Asian Ambiguous Character][EAWA]) が、日本語環境で文字幅を適切に扱うことが出来ずに表示が乱れる問題が発生しています。
 
-このリポジトリは、端末多重化ソフトウェアである [tmux][TMUX] において、Unicode の規格における東アジア圏の各種文字のうち、いわゆる "◎" や "★" 等の記号文字及び罫線文字等、 [East_Asian_Width 特性の値が A (Ambiguous) となる文字][EAWA] (以下、 [East Asian Ambiguous Character][EAWA]) が、日本語環境で文字幅を適切に扱うことが出来ずに表示が乱れる問題を修正するための差分ファイルを適用した [tmux][TMUX] を起動する [AppImage ファイル][APPI]を生成するための Docker コンテナを構築する Dockerfile 等を含むリポジトリです。
+このリポジトリは、端末多重化ソフトウェアである [tmux][TMUX] において、Unicode の規格における東アジア圏の各種文字のうち、いわゆる "◎" や "★" 等の記号文字及び罫線文字等、 [East_Asian_Width 特性の値が A (Ambiguous) となる文字][EAWA] (以下、 [East Asian Ambiguous Character][EAWA]) が、日本語環境で文字幅を適切に扱うことが出来ずに表示が乱れる問題を修正するための差分ファイルを適用した [tmux][TMUX] を起動する [AppImage パッケージファイル][APPI]を生成するための Docker コンテナを構築する Dockerfile 等を含むリポジトリです。
 
-即ち、本リポジトリに含まれる Dockerfile によって構築される Docker コンテナは、 "[East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]" を適用した端末多重化ソフトウェアである [tmux][TMUX] を起動するための [AppImage ファイル][APPI]を生成する為の Docker コンテナです。
+即ち、本リポジトリに含まれる Dockerfile によって構築される Docker コンテナは、 "[East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]" を適用した端末多重化ソフトウェアである [tmux][TMUX] を起動するための [AppImage パッケージファイル][APPI]を生成する為の Docker コンテナです。
 
-なお、本リポジトリのオリジナルとなった [Nelson Enzo 氏][NELS]による [Dockerfile][TAPP] とは、 [tmux][TMUX] に依存するライブラリである ```libevent``` 及び ```ncurses``` を始め、これらのビルドに必要となる ```m4, autoconf, automake, libtool``` をソースコードからビルドする点で異なっています。
+なお、この Docker コンテナは、 Linux のディストリビューションの一つである [Debian Jessie][DEBI] をベースに、ソースコードのビルドに基づくパッケージの導入システムである [Linuxbrew][BREW] を導入した [Docker][DOCK] コンテナである [```debian-linuxbrew-container```][DDCK] に依存しています。本リポジトリを使用して [tmux][TMUX] の [AppImage パッケージファイル][APPI]を作成する前に、 [```debian-linuxbrew-container```][DDCK] を導入する必要があります。
 
 ## 使用法
 
-まず最初に、 Docker コンテナの公式のドキュメントである "[Docker のインストール — Docker-docs-ja 17.06.Beta ドキュメント][DCK1]" のページ等を参考にして、 [tmux][TMUX] の [AppImage ファイル][APPI]を生成するための端末に Docker コンテナ環境を構築します。
+まず最初に、 Docker コンテナの公式のドキュメントである "[Docker のインストール — Docker-docs-ja 17.06.Beta ドキュメント][DCK1]" のページ等を参考にして、 [tmux][TMUX] の [AppImage パッケージファイル][APPI]を生成するための端末に Docker コンテナ環境を構築します。
+
+次に、概要にて前述した通り、 Linux のディストリビューションの一つである [Debian Jessie][DEBI] をベースに、ソースコードのビルドに基づくパッケージの導入システムである [Linuxbrew][BREW] を導入した [Docker][DOCK] コンテナである [```debian-linuxbrew-container```][DDCK] を以下の ```README.md``` を参照して導入します。
+
+- [https://github.com/z80oolong/debian-linuxbrew-container/blob/master/README.md][DDK1]
 
 そして、本リポジトリ内のシェルスクリプト ```build-appimage.sh``` を以下の通りに起動します。
 
@@ -20,20 +24,26 @@
   $ ./build-appimage.sh
 ```
 
-シェルスクリプト ```build-appimage.sh``` の起動により、[East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]を適用した [tmux][TMUX] をビルドするための Docker コンテナが構築され、 Docker コンテナ内にて、 [tmux][TMUX] 及び [tmux][TMUX] に依存するライブラリ群等がビルドされ、 [tmux][TMUX] を起動するための [AppImage ファイル][APPI]が生成されます。
+シェルスクリプト ```build-appimage.sh``` の起動により、[East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]を適用した [tmux][TMUX] をビルドするための Docker コンテナが構築され、 Docker コンテナ内にて、 [tmux][TMUX] 及び [tmux][TMUX] に依存するライブラリ群等がビルドされ、 [tmux][TMUX] を起動するための [AppImage パッケージファイル][APPI]が生成されます。
 
-そして、シェルスクリプトが正常に終了すると、ディレクトリ ```./opt/release``` 以下に [AppImage ファイル][APPI] ```tmux-eaw-3.0a-x86_64.AppImage``` が生成されます。
+そして、シェルスクリプトが正常に終了すると、ディレクトリ ```./opt/release``` 以下に [AppImage パッケージファイル][APPI] ```tmux-eaw-3.0a-x86_64.AppImage``` が生成されます。
 
-なお、シェルスクリプト ```build-appimage.sh``` は、デフォルトでは最新の安定版である [tmux 3.0a][TMUX] の [AppImage ファイル][APPI]を生成しますが、以下のようにオプション ```-r, --release``` で安定版のバージョン番号を指定することにより、指定されたバージョンの [tmux][TMUX] の [AppImage ファイル][APPI]を生成することが出来ます。
+なお、シェルスクリプト ```build-appimage.sh``` は、デフォルトでは最新の安定版である [tmux 3.0a][TMUX] の [AppImage パッケージファイル][APPI]を生成しますが、以下のようにオプション ```-r, --release``` で安定版のバージョン番号を指定することにより、指定されたバージョンの [tmux][TMUX] の [AppImage パッケージファイル][APPI]を生成することが出来ます。
 
 ```
   $ ./build-appimage.sh -r 2.9a        (旧安定版 tmux 2.9a をビルド。)
-  $ ./build-appimage.sh --release 2.7  (旧安定版 tmux 2.7  をビルド。)
+  $ ./build-appimage.sh --release=2.7  (旧安定版 tmux 2.7  をビルド。)
 ```
 
-## AppImage ファイルの使用法
+また、 [AppImage パッケージファイル][APPI]を生成するための Docker イメージを再構築するには、オプション ```-u, --update``` を使用します。
 
-前述で生成した [AppImage ファイル][APPI] ```tmux-eaw-3.0a-x86_64.AppImage``` を用いて [tmux][TMUX] を起動するには、以下の通りにして  [AppImage ファイル][APPI] ```tmux-eaw-3.0a-x86_64.AppImage``` にファイルの実行権限を付与して環境変数 ```PATH``` が示すディレクトリに配置します。
+```
+  $ ./build-appimage.sh -ur 2.9a        (Docker イメージを再構築して、旧安定版 tmux 2.9a をビルド。)
+```
+
+## AppImage パッケージファイルの使用法
+
+前述で生成した [AppImage パッケージファイル][APPI] ```tmux-eaw-3.0a-x86_64.AppImage``` を用いて [tmux][TMUX] を起動するには、以下の通りにして  [AppImage パッケージファイル][APPI] ```tmux-eaw-3.0a-x86_64.AppImage``` にファイルの実行権限を付与して環境変数 ```PATH``` が示すディレクトリに配置します。
 
 そして、以下のようにして ```tmux-eaw-3.0a-x86_64.AppImage``` から ```tmux``` へシンボリックリンクを張ると、コマンドラインから ```tmux``` と入力することで、 [East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]を適用した [tmux][TMUX] が起動します。
 
@@ -50,11 +60,11 @@
 
 ここで、 [East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]が適用された [tmux][TMUX] の使用法の詳細については、 "[tmux 2.5 以降において East Asian Ambiguous Character を全角文字の幅で表示する][GST1]" を参照して下さい。
 
-## AppImage ファイルの配布
+## AppImage パッケージファイルの配布
 
-[East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]が適用された [tmux][TMUX] のビルド済の [AppImage ファイル][APPI]については、以下の URL より配布いたしますので、どうか宜しく御願い致します。
+[East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]が適用された [tmux][TMUX] のビルド済の [AppImage パッケージファイル][APPI]については、以下の URL より配布いたしますので、どうか宜しく御願い致します。
 
-- EAW 対応 tmux を起動する AppImage ファイルの配布ページ
+- EAW 対応 tmux を起動する AppImage パッケージファイルの配布ページ
     - [https://github.com/z80oolong/tmux-eaw-appimage/releases][APPR]
 
 ## 謝辞
@@ -70,7 +80,7 @@
 
 ## 使用条件
 
-本リポジトリは、 [East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]を適用した端末多重化ソフトウェア [tmux][TMUX] を起動するための [AppImage ファイル][APPI]を生成するための Dockerfile 等を含むリポジトリであり、以下の各氏が著作権を有し、 [MIT ライセンス][MITL] に基づいて配布されるものとします。
+本リポジトリは、 [East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]を適用した端末多重化ソフトウェア [tmux][TMUX] を起動するための [AppImage パッケージファイル][APPI]を生成するための Dockerfile 等を含むリポジトリであり、以下の各氏が著作権を有し、 [MIT ライセンス][MITL] に基づいて配布されるものとします。
 
 - [Nelson Enzo 氏][NELS]
 - [Z.OOL. (mailto:zool@zool.jpn.org)][ZOOL]
@@ -135,12 +145,16 @@ The [Dockerfile](Dockerfile) contains all the magic ingredients to compile tmux.
 
 [APPI]:https://appimage.org/
 [TMUX]:http://tmux.github.io/
+[DEBI]:https://www.debian.org/
+[BREW]:https://linuxbrew.sh
+[DDCK]:https://github.com/z80oolong/debian-linuxbrew-container/
 [EAWA]:http://www.unicode.org/reports/tr11/#Ambiguous
 [TAPP]:https://github.com/nelsonenzo/tmux-appimage
 [TMRP]:https://github.com/tmux/tmux.git
 [GST1]:https://github.com/z80oolong/tmux-eaw-fix
 [APPR]:https://github.com/z80oolong/tmux-eaw-appimage/releases
 [DCK1]:http://docs.docker.jp/engine/installation/
+[DDK1]:https://github.com/z80oolong/debian-linuxbrew-container/blob/master/README.md
 [NELS]:https://github.com/nelsonenzo
 [NELT]:https://github.com/nelsonenzo/tmux-appimage
 [KOIE]:https://github.com/koie

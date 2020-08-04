@@ -2,9 +2,10 @@ class TmuxAT33Next < Formula
   desc "Terminal multiplexer"
   homepage "https://tmux.github.io/"
 
-  tmux_version = "HEAD-a5f99e14"
-  url "https://github.com/tmux/tmux.git"
-  head "https://github.com/tmux/tmux.git", :commit => "a5f99e14c6f264e568b860692b89d11f5298a3f2"
+  @@tmux_commit  = "90158b59"
+  tmux_version = "HEAD-#{@@tmux_commit}"
+  url  "https://github.com/tmux/tmux.git"
+  head "https://github.com/tmux/tmux.git", :revision => @@tmux_commit
   version tmux_version
 
   keg_only :versioned_formula
@@ -19,6 +20,7 @@ class TmuxAT33Next < Formula
   depends_on "z80oolong/tmux/tmux-ncurses@6.2" unless OS.mac?
 
   option "without-utf8-cjk", "Build without using East asian Ambiguous Width Character in tmux."
+  option "without-utf8-cjk-emoji", "Build without using East asian Emoji Character in tmux."
   option "without-pane-border-acs-ascii", "Build without using ACS ASCII as pane border in tmux."
 
   resource "completion" do
@@ -26,9 +28,9 @@ class TmuxAT33Next < Formula
     sha256 "05e79fc1ecb27637dc9d6a52c315b8f207cf010cdcee9928805525076c9020ae"
   end
 
-  diff_file = Tap.fetch("z80oolong/tmux").path/"diff/tmux-HEAD-a5f99e14-fix.diff"
+  diff_file = Tap.fetch("z80oolong/tmux").path/"diff/tmux-HEAD-#{@@tmux_commit}-fix.diff"
   unless diff_file.exist? then
-    diff_file = Formula["z80oolong/tmux/#{name}"].opt_prefix/".brew/tmux-HEAD-a5f99e14-fix.diff"
+    diff_file = Formula["z80oolong/tmux/#{name}"].opt_prefix/".brew/tmux-HEAD-#{@@tmux_commit}-fix.diff"
   end
   patch :p1, diff_file.open.gets(nil)
 
@@ -65,7 +67,7 @@ class TmuxAT33Next < Formula
   end
 
   def post_install
-    system "install", "-m", "0444", Tap.fetch("z80oolong/tmux").path/"diff/tmux-HEAD-a5f99e14-fix.diff", "#{prefix}/.brew"
+    system "install", "-m", "0444", Tap.fetch("z80oolong/tmux").path/"diff/tmux-HEAD-#{@@tmux_commit}-fix.diff", "#{prefix}/.brew"
   end
 
   def fix_rpath(binname, append_list, delete_list)
