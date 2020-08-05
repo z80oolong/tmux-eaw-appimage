@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export RELEASE="3.1b"
-export HEAD_COMMIT="90158b59"
+export HEAD_COMMIT="98aa8350"
 export UPDATE="no"
 export TIME=`date +'%Y%m%d%H%M%S'`
 
