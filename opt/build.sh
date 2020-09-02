@@ -2,11 +2,9 @@
 
 export OPTDIR="/home/linuxbrew/opt"
 export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
-export LD_LIBRARY_PATH="$HOMEBREW_PREFIX/opt/tmux-ncurses@6.2/lib:$HOMEBREW_PREFIX/opt/tmux-libevent@2.2/lib:$HOMEBREW_PREFIX/lib:$LD_LIBRARY_PATH"
 
-cd $OPTDIR
-mkdir ./releases
-mkdir -p ./AppDir/usr/lib
+mkdir $OPTDIR/releases
+mkdir -p $OPTDIR/AppDir/usr/lib
 
 case "$RELEASE_TAG" in
   HEAD-*)  RELEASE="3.3-next"      ;;
@@ -15,9 +13,11 @@ case "$RELEASE_TAG" in
 esac
 
 chmod +x $OPTDIR/AppRun
-cp -pRv $HOMEBREW_PREFIX/opt/tmux-ncurses@6.2/share/terminfo ./AppDir/usr/lib
+cp -pRv $HOMEBREW_PREFIX/opt/tmux-ncurses@6.2/share/terminfo $OPTDIR/AppDir/usr/lib
 
-sudo env OUTPUT="$OPTDIR/releases/tmux-eaw-$RELEASE_TAG-x86_64.AppImage" \
+export LD_LIBRARY_PATH="$HOMEBREW_PREFIX/opt/tmux-ncurses@6.2/lib:$HOMEBREW_PREFIX/opt/tmux-libevent@2.2/lib:$HOMEBREW_PREFIX/lib:$LD_LIBRARY_PATH"
+
+/usr/bin/sudo /usr/bin/env OUTPUT="$OPTDIR/releases/tmux-eaw-$RELEASE_TAG-x86_64.AppImage" \
   $HOMEBREW_PREFIX/opt/linuxdeploy/bin/linuxdeploy --appdir=AppDir \
   -i $OPTDIR/tmux-logo-square.png \
   -d $OPTDIR/tmux.desktop \

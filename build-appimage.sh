@@ -1,7 +1,9 @@
 #!/bin/bash
 
+export DOCKER="/usr/bin/docker"
+#export DOCKER="/usr/bin/podman"
 export RELEASE="3.1b"
-export HEAD_COMMIT="98aa8350"
+export HEAD_COMMIT="b895ffbf"
 export UPDATE="no"
 export TIME=`date +'%Y%m%d%H%M%S'`
 
@@ -52,7 +54,7 @@ fi
 
 mkdir -p ./opt/releases
 
-docker build . -t tmux --build-arg TMUX_RELEASE=$RELEASE && \
-docker create -ti --name tmuxcontainer tmux /bin/bash && \
-docker cp tmuxcontainer:/home/linuxbrew/opt/releases/tmux-eaw-$RELEASE-x86_64.AppImage ./opt/releases && \
-docker rm -f tmuxcontainer
+${DOCKER} build . -t tmux --build-arg TMUX_RELEASE=$RELEASE && \
+${DOCKER} create -ti --name tmuxcontainer tmux /bin/bash && \
+${DOCKER} cp tmuxcontainer:/home/linuxbrew/opt/releases/tmux-eaw-$RELEASE-x86_64.AppImage ./opt/releases && \
+${DOCKER} rm -f tmuxcontainer
