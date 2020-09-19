@@ -2,7 +2,7 @@ class TmuxAT33Next < Formula
   desc "Terminal multiplexer"
   homepage "https://tmux.github.io/"
 
-  tmux_commit  = "b895ffbf"
+  tmux_commit  = "eea85fb4"
   tmux_version = "HEAD-#{tmux_commit}"
   url  "https://github.com/tmux/tmux.git"
   head "https://github.com/tmux/tmux.git", :revision => tmux_commit
@@ -196,7 +196,7 @@ index b9a676a2..c2e2df1c 100644
  	exit(client_main(osdep_event_init(), argc, argv, flags, feat));
  }
 diff --git a/tmux.h b/tmux.h
-index dce5f140..0df27661 100644
+index efc54a9a..545bc920 100644
 --- a/tmux.h
 +++ b/tmux.h
 @@ -69,6 +69,10 @@ struct winlink;
@@ -528,7 +528,7 @@ index a5d57cd7..3ccdd4f2 100644
  	/* Log the capabilities. */
  	for (i = 0; i < tty_term_ncodes(); i++)
 diff --git a/utf8.c b/utf8.c
-index e640d845..7b3766c8 100644
+index 458363b8..f8780f13 100644
 --- a/utf8.c
 +++ b/utf8.c
 @@ -26,6 +26,407 @@
