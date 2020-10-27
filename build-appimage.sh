@@ -3,7 +3,7 @@
 export DOCKER="/usr/bin/docker"
 #export DOCKER="/usr/bin/podman"
 export RELEASE="3.1b"
-export HEAD_COMMIT="30601d11"
+export HEAD_COMMIT=`/usr/bin/env ruby ./opt/tmux@3.3-next.rb`
 export UPDATE="no"
 export TIME=`date +'%Y%m%d%H%M%S'`
 
