@@ -2,7 +2,7 @@ module TMUX
   module_function
 
   def commit
-    return "20e89605"
+    return "dac285c9"
   end
 end
 
@@ -208,7 +208,7 @@ index 066714df..40b5bd52 100644
  	exit(client_main(osdep_event_init(), argc, argv, flags, feat));
  }
 diff --git a/tmux.h b/tmux.h
-index 5a4db83b..e06adc15 100644
+index 44ba53f5..9560e08e 100644
 --- a/tmux.h
 +++ b/tmux.h
 @@ -77,6 +77,17 @@ struct winlink;

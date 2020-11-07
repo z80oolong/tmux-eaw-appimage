@@ -1,3 +1,4 @@
 opt/releases/*
+opt/formula/*
 opt/BREW_UPDATE_TIME
 *.AppImage

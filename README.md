@@ -26,33 +26,26 @@
 
 シェルスクリプト ```build-appimage.sh``` の起動により、[East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]を適用した [tmux][TMUX] をビルドするための Docker コンテナが構築され、 Docker コンテナ内にて、 [tmux][TMUX] 及び [tmux][TMUX] に依存するライブラリ群等がビルドされ、 [tmux][TMUX] を起動するための [AppImage パッケージファイル][APPI]が生成されます。
 
-そして、シェルスクリプトが正常に終了すると、ディレクトリ ```./opt/release``` 以下に [AppImage パッケージファイル][APPI] ```tmux-eaw-3.0a-x86_64.AppImage``` が生成されます。
+そして、シェルスクリプトが正常に終了すると、ディレクトリ ```./opt/release``` 以下に [AppImage パッケージファイル][APPI] ```tmux-eaw-*-x86_64.AppImage``` が生成されます。
 
-なお、シェルスクリプト ```build-appimage.sh``` は、デフォルトでは最新の安定版である [tmux 3.0a][TMUX] の [AppImage パッケージファイル][APPI]を生成しますが、以下のようにオプション ```-r, --release``` で安定版のバージョン番号を指定することにより、指定されたバージョンの [tmux][TMUX] の [AppImage パッケージファイル][APPI]を生成することが出来ます。
-
-```
-  $ ./build-appimage.sh -r 2.9a        (旧安定版 tmux 2.9a をビルド。)
-  $ ./build-appimage.sh --release=2.7  (旧安定版 tmux 2.7  をビルド。)
-```
-
-また、 [AppImage パッケージファイル][APPI]を生成するための Docker イメージを再構築するには、オプション ```-u, --update``` を使用します。
+なお、ここで [AppImage パッケージファイル][APPI]を生成するための Docker イメージを再構築するには、オプション ```-u, --update``` を使用します。
 
 ```
-  $ ./build-appimage.sh -ur 2.9a        (Docker イメージを再構築して、旧安定版 tmux 2.9a をビルド。)
+  $ ./build-appimage.sh -u (Docker イメージを再構築して、 AppImage パッケージをビルド。)
 ```
 
 ## AppImage パッケージファイルの使用法
 
-前述で生成した [AppImage パッケージファイル][APPI] ```tmux-eaw-3.0a-x86_64.AppImage``` を用いて [tmux][TMUX] を起動するには、以下の通りにして  [AppImage パッケージファイル][APPI] ```tmux-eaw-3.0a-x86_64.AppImage``` にファイルの実行権限を付与して環境変数 ```PATH``` が示すディレクトリに配置します。
+前述で生成した [AppImage パッケージファイル][APPI] ```tmux-eaw-3.1c-x86_64.AppImage``` を用いて [tmux][TMUX] を起動するには、以下の通りにして  [AppImage パッケージファイル][APPI] ```tmux-eaw-3.1c-x86_64.AppImage``` にファイルの実行権限を付与して環境変数 ```PATH``` が示すディレクトリに配置します。
 
-そして、以下のようにして ```tmux-eaw-3.0a-x86_64.AppImage``` から ```tmux``` へシンボリックリンクを張ると、コマンドラインから ```tmux``` と入力することで、 [East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]を適用した [tmux][TMUX] が起動します。
+そして、以下のようにして ```tmux-eaw-3.1c-x86_64.AppImage``` から ```tmux``` へシンボリックリンクを張ると、コマンドラインから ```tmux``` と入力することで、 [East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]を適用した [tmux][TMUX] が起動します。
 
 ```
   $ cd opt/release
-  $ chmod u+x ./tmux-eaw-3.0a-x86_64.AppImage
-  $ sudo cp -pRv ./tmux-eaw-3.0a-x86_64.AppImage /usr/local/bin    # (一例として /usr/local/bin 以下に導入する場合を示す。)
+  $ chmod u+x ./tmux-eaw-3.1c-x86_64.AppImage
+  $ sudo cp -pRv ./tmux-eaw-3.1c-x86_64.AppImage /usr/local/bin    # (一例として /usr/local/bin 以下に導入する場合を示す。)
   $ cd /usr/local/bin
-  $ sudo ln -sf tmux-eaw-3.0a-x86_64.AppImage tmux
+  $ sudo ln -sf tmux-eaw-3.1c-x86_64.AppImage tmux
   ...
   $ tmux
   ...
