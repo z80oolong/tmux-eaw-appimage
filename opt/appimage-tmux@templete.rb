@@ -7,7 +7,7 @@ class AppimageTmuxAT%%TMUX_VERSION_CLASS%% < Formula
   url "https://github.com/z80oolong/tmux-eaw-appimage/releases/download/#{appimage_version}/tmux-eaw-#{tmux_version}-x86_64.AppImage"
   sha256 "%%SHA256_TMUX_STABLE%%"
   version tmux_version
-  revision 10
+  revision %%TMUX_REVISION%%
 
   keg_only :versioned_formula
 

@@ -34,7 +34,7 @@ RUN brew install -s \
     && rm -rf /home/linuxbrew/.cache/Homebrew/* /home/linuxbrew/.linuxbrew/tmp/*
 
 COPY ./opt/tmux@3.3-next.rb /home/linuxbrew/opt/
-RUN brew install -s /home/linuxbrew/opt/tmux@3.3-next.rb --HEAD \
+RUN brew install -s /home/linuxbrew/opt/tmux@3.3-next.rb \
     && rm -rf /home/linuxbrew/.cache/Homebrew/* /home/linuxbrew/.linuxbrew/tmp/*
 
 ## build tmux-eaw-$RELEASE_TAG-x86_64.ApppImage
