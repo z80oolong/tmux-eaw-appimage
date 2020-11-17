@@ -2,7 +2,7 @@
 
 export DOCKER="/usr/bin/docker"
 #export DOCKER="/usr/bin/podman"
-export APPIMAGE_VERSION='v3.1c-eaw-appimage-0.1.0'
+export APPIMAGE_VERSION=`/usr/bin/env git tag | tail -1`
 export STABLE_RELEASE='3.1c'
 export TMUX_REVISION='11'
 export RELEASE=$STABLE_RELEASE
