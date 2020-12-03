@@ -2,11 +2,13 @@
 
 export DOCKER="/usr/bin/docker"
 #export DOCKER="/usr/bin/podman"
-export APPIMAGE_VERSION=`/usr/bin/env git tag | tail -1`
-export STABLE_RELEASE='3.1c'
-export TMUX_REVISION='11'
+export APPIMAGE_VERSION=`/usr/bin/env ruby ./opt/tmux@3.3-next.rb appimage_version`
+export STABLE_RELEASE=`/usr/bin/env ruby ./opt/tmux@3.3-next.rb stable_version`
+export DEVEL_RELEASE=`/usr/bin/env ruby ./opt/tmux@3.3-next.rb devel_version`
+export STABLE_RELEASE_LIST=`/usr/bin/env ruby ./opt/tmux@3.3-next.rb stable_version_list`
+export TMUX_REVISION=`/usr/bin/env ruby ./opt/tmux@3.3-next.rb appimage_revision`
 export RELEASE=$STABLE_RELEASE
-export HEAD_COMMIT=`/usr/bin/env ruby ./opt/tmux@3.3-next.rb`
+export HEAD_COMMIT=`/usr/bin/env ruby ./opt/tmux@3.3-next.rb commit`
 export UPDATE="no"
 export TIME=`date +'%Y%m%d%H%M%S'`
 
@@ -48,14 +50,14 @@ fi
 mkdir -p ./opt/releases
 mkdir -p ./opt/formula
 
-for RELEASE in 2.6 2.7 2.8 2.9 2.9a 3.0 3.0a 3.1 3.1a 3.1b 3.1c 3.2-rc3 HEAD-$HEAD_COMMIT; do
+for RELEASE in $STABLE_RELEASE_LIST $DEVEL_RELEASE HEAD-$HEAD_COMMIT; do
   ${DOCKER} build . -t tmux --build-arg TMUX_RELEASE=$RELEASE && \
   ${DOCKER} create -ti --name tmuxcontainer tmux /bin/bash && \
   ${DOCKER} cp tmuxcontainer:/home/linuxbrew/opt/releases/tmux-eaw-$RELEASE-x86_64.AppImage ./opt/releases && \
   ${DOCKER} rm -f tmuxcontainer
 done
 
-for RELEASE in 2.6 2.7 2.8 2.9 2.9a 3.0 3.0a 3.1 3.1a 3.1b 3.1c 3.2-rc3; do
+for RELEASE in $STABLE_RELEASE_LIST $DEVEL_RELEASE; do
   cat ./opt/appimage-tmux@templete.rb | \
       sed -e "s/%%TMUX_VERSION%%/$RELEASE/g" -e "s/%%TMUX_REVISION%%/$TMUX_REVISION/g" \
           -e "s/%%APPIMAGE_VERSION%%/$APPIMAGE_VERSION/g" \

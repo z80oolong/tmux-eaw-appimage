@@ -1,17 +1,46 @@
-module HEAD
+module TmuxM
   module_function
 
   def commit_long
-    return "e94bd5ccff42361788e71acb2315b9b10112cae1"
+    return "70a5207bd10fb0896ff9f2adbbba0d9eac962155"
+  end
+
+  def appimage_revision
+    return 12
+  end
+
+  def stable_version_list
+    return %w(2.6 2.7 2.8 2.9 3.0 3.0a 3.1 3.1a 3.1b 3.1c)
+  end
+
+  def devel_version
+    return "3.2-rc3"
+  end
+
+  def stable_version
+    return stable_version_list[-1]
+  end
+
+  def appimage_version
+    return "v#{stable_version}-eaw-appimage-0.1.2"
   end
 
   def commit
-    return commit_long[0..7]
+    return commit_long[0..7]                                            
   end
 end
 
 if __FILE__ == $0 then
-  puts HEAD::commit
+  case ARGV[0]
+    when "commit_long";         puts TmuxM::commit_long
+    when "appimage_revision";   puts TmuxM::appimage_revision
+    when "appimage_version";    puts TmuxM::appimage_version
+    when "commit";              puts TmuxM::commit
+    when "stable_version_list"; puts TmuxM::stable_version_list.join(" ")
+    when "stable_version";      puts TmuxM::stable_version
+    when "devel_version";       puts TmuxM::devel_version
+  end
+
   exit 0
 end
 
@@ -21,8 +50,8 @@ class TmuxAT33Next < Formula
   revision 6
 
   stable do
-    tmux_version = "HEAD-#{HEAD::commit}"
-    url "https://github.com/tmux/tmux/archive/#{HEAD::commit_long}.zip"
+    tmux_version = "HEAD-#{TmuxM::commit}"
+    url "https://github.com/tmux/tmux/archive/#{TmuxM::commit_long}.zip"
     version tmux_version
 
     def pick_diff(formula_path)
@@ -46,7 +75,7 @@ class TmuxAT33Next < Formula
   depends_on "z80oolong/tmux/tmux-ncurses@6.2" unless OS.mac?
 
   keg_only :versioned_formula
-
+ 
   option "with-version-master", "In head build, set the version of tmux as `master`."
   option "without-utf8-cjk", "Build without using East asian Ambiguous Width Character in tmux."
   option "without-utf8-emoji", "Build without using Emoji Character in tmux."
