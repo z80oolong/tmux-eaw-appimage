@@ -2,11 +2,11 @@ module TmuxM
   module_function
 
   def commit_long
-    return "70a5207bd10fb0896ff9f2adbbba0d9eac962155"
+    return "3cbe186efb93980959e410162c1583a3b54a8417"
   end
 
   def appimage_revision
-    return 12
+    return 13
   end
 
   def stable_version_list
@@ -22,7 +22,7 @@ module TmuxM
   end
 
   def appimage_version
-    return "v#{stable_version}-eaw-appimage-0.1.2"
+    return "v#{stable_version}-eaw-appimage-0.1.3"
   end
 
   def commit
@@ -72,7 +72,7 @@ class TmuxAT33Next < Formula
 
   depends_on "z80oolong/tmux/tmux-libevent@2.2"
   depends_on "utf8proc" => :optional
-  depends_on "z80oolong/tmux/tmux-ncurses@6.2" unless OS.mac?
+  depends_on "z80oolong/tmux/tmux-ncurses@6.2"
 
   keg_only :versioned_formula
  
