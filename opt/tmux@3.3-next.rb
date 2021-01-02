@@ -10,7 +10,7 @@ module TmuxM
   end
 
   def stable_version_list
-    return %w(2.6 2.7 2.8 2.9 3.0 3.0a 3.1 3.1a 3.1b 3.1c)
+    return %w(2.6 2.7 2.8 2.9 2.9a 3.0 3.0a 3.1 3.1a 3.1b 3.1c)
   end
 
   def devel_version
