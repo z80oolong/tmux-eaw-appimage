@@ -2,7 +2,7 @@ module TmuxM
   module_function
 
   def commit_long
-    return "82423975df8b8de859c58e84a4248f4749cb8b16"
+    return "fe3ab51b78901aea8be8fe970ecbd929c69bb64b"
   end
 
   def appimage_revision
