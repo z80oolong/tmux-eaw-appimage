@@ -2,19 +2,19 @@ module TmuxM
   module_function
 
   def commit_long
-    return "be568ea3b21b88763d2cc274bdec3a476136de2f"
+    return "dda3bf896be9ce87b4066636cc7f94ab8030133a"
   end
 
   def appimage_revision
-    return 17
+    return 18
   end
 
   def stable_version_list
-    return %w(2.6 2.7 2.8 2.9 2.9a 3.0 3.0a 3.1 3.1a 3.1b 3.1c)
+    return %w(2.6 2.7 2.8 2.9 2.9a 3.0 3.0a 3.1 3.1a 3.1b 3.1c 3.2)
   end
 
   def devel_version
-    return "3.2-rc4"
+    return ""
   end
 
   def stable_version
