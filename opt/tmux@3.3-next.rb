@@ -2,11 +2,11 @@ module TmuxM
   module_function
 
   def commit_long
-    return "f2951bd4a560692048e68bf29a5b0a288346a7d4"
+    return "9ea971dc046ed1c5f241cf1f7b91b3a16e049225"
   end
 
   def appimage_revision
-    return 19
+    return 20
   end
 
   def stable_version_list
@@ -22,7 +22,7 @@ module TmuxM
   end
 
   def appimage_version
-    return "v#{stable_version}-eaw-appimage-0.1.1"
+    return "v#{stable_version}-eaw-appimage-0.1.2"
   end
 
   def commit
