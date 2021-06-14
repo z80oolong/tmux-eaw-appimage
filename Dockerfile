@@ -31,6 +31,7 @@ RUN brew install -s \
     z80oolong/tmux/tmux@2.9  z80oolong/tmux/tmux@2.9a z80oolong/tmux/tmux@3.0 \
     z80oolong/tmux/tmux@3.0a z80oolong/tmux/tmux@3.1  z80oolong/tmux/tmux@3.1a \
     z80oolong/tmux/tmux@3.1b z80oolong/tmux/tmux@3.1c z80oolong/tmux/tmux@3.2 \
+    z80oolong/tmux/tmux@3.2a \
     && rm -rf /home/linuxbrew/.cache/Homebrew/* /home/linuxbrew/.linuxbrew/tmp/*
 
 COPY ./opt/tmux@3.3-next.rb /home/linuxbrew/opt/
@@ -39,7 +40,7 @@ RUN brew install -s /home/linuxbrew/opt/tmux@3.3-next.rb --with-version-master \
 
 ## build tmux-eaw-$RELEASE_TAG-x86_64.ApppImage
 
-ARG TMUX_RELEASE=3.1c
+ARG TMUX_RELEASE=3.2a
 ENV RELEASE_TAG=$TMUX_RELEASE
 
 COPY ./opt/AppRun ./opt/build.sh ./opt/tmux-logo-square.png ./opt/tmux.desktop /home/linuxbrew/opt/
