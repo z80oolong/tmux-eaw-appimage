@@ -2,13 +2,13 @@
 
 export DOCKER="/usr/bin/docker"
 #export DOCKER="/usr/bin/podman"
-export APPIMAGE_VERSION=`/usr/bin/env ruby ./opt/tmux@3.3-next.rb appimage_version`
-export STABLE_RELEASE=`/usr/bin/env ruby ./opt/tmux@3.3-next.rb stable_version`
-export DEVEL_RELEASE=`/usr/bin/env ruby ./opt/tmux@3.3-next.rb devel_version`
-export STABLE_RELEASE_LIST=`/usr/bin/env ruby ./opt/tmux@3.3-next.rb stable_version_list`
-export TMUX_REVISION=`/usr/bin/env ruby ./opt/tmux@3.3-next.rb appimage_revision`
+export APPIMAGE_VERSION=`/usr/bin/env ruby ./opt/tmux@3.4-next.rb appimage_version`
+export STABLE_RELEASE=`/usr/bin/env ruby ./opt/tmux@3.4-next.rb stable_version`
+export DEVEL_RELEASE=`/usr/bin/env ruby ./opt/tmux@3.4-next.rb devel_version`
+export STABLE_RELEASE_LIST=`/usr/bin/env ruby ./opt/tmux@3.4-next.rb stable_version_list`
+export TMUX_REVISION=`/usr/bin/env ruby ./opt/tmux@3.4-next.rb appimage_revision`
 export RELEASE=$STABLE_RELEASE
-export HEAD_COMMIT=`/usr/bin/env ruby ./opt/tmux@3.3-next.rb commit`
+export HEAD_COMMIT=`/usr/bin/env ruby ./opt/tmux@3.4-next.rb commit`
 export UPDATE="no"
 export TIME=`date +'%Y%m%d%H%M%S'`
 

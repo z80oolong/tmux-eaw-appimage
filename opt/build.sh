@@ -7,8 +7,8 @@ mkdir $OPTDIR/releases
 mkdir -p $OPTDIR/AppDir/usr/lib
 
 case "$RELEASE_TAG" in
-  HEAD-*)  RELEASE="3.3-next"      ;;
-  3.2-rc*) RELEASE="3.2"      ;;
+  HEAD-*)  RELEASE="3.4-next"      ;;
+  3.3-rc*) RELEASE="3.3"      ;;
   *)       RELEASE="$RELEASE_TAG" ;;
 esac
 

@@ -31,11 +31,11 @@ RUN brew install -s \
     z80oolong/tmux/tmux@2.9  z80oolong/tmux/tmux@2.9a z80oolong/tmux/tmux@3.0 \
     z80oolong/tmux/tmux@3.0a z80oolong/tmux/tmux@3.1  z80oolong/tmux/tmux@3.1a \
     z80oolong/tmux/tmux@3.1b z80oolong/tmux/tmux@3.1c z80oolong/tmux/tmux@3.2 \
-    z80oolong/tmux/tmux@3.2a \
+    z80oolong/tmux/tmux@3.2a z80oolong/tmux/tmux@3.3 \
     && rm -rf /home/linuxbrew/.cache/Homebrew/* /home/linuxbrew/.linuxbrew/tmp/*
 
-COPY ./opt/tmux@3.3-next.rb /home/linuxbrew/opt/
-RUN brew install -s /home/linuxbrew/opt/tmux@3.3-next.rb --with-version-master \
+COPY ./opt/tmux@3.4-next.rb /home/linuxbrew/opt/
+RUN brew install -s /home/linuxbrew/opt/tmux@3.4-next.rb --with-version-master \
     && rm -rf /home/linuxbrew/.cache/Homebrew/* /home/linuxbrew/.linuxbrew/tmp/*
 
 ## build tmux-eaw-$RELEASE_TAG-x86_64.ApppImage

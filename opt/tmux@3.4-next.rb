@@ -2,7 +2,7 @@ module TmuxM
   module_function
 
   def commit_long
-    return "609baea95e30201919a173ea1de1f750a15a9f8c"
+    return "25df71b90da9ac9aaedecb623fc7e353eff4d9da"
   end
 
   def appimage_revision
@@ -14,7 +14,7 @@ module TmuxM
   end
 
   def devel_version
-    return ""
+    return "3.3-rc"
   end
 
   def stable_version
@@ -44,7 +44,7 @@ if __FILE__ == $0 then
   exit 0
 end
 
-class TmuxAT33Next < Formula
+class TmuxAT34Next < Formula
   desc "Terminal multiplexer"
   homepage "https://tmux.github.io/"
   revision 6
