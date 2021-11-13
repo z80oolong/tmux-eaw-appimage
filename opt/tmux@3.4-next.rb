@@ -6,7 +6,7 @@ module TmuxM
   end
 
   def appimage_revision
-    return 26
+    return 27
   end
 
   def stable_version_list
@@ -22,7 +22,7 @@ module TmuxM
   end
 
   def appimage_version
-    return "v#{stable_version}-eaw-appimage-0.1.5"
+    return "v#{stable_version}-eaw-appimage-0.1.6"
   end
 
   def commit
