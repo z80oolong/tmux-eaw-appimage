@@ -1,48 +1,6 @@
-module TmuxM
-  module_function
+$:.unshift((Pathname.new(__FILE__).dirname/"..").realpath.to_s)
 
-  def commit_long
-    return "c67abcf8182b3a4e4c1e71b370c814a65c12a46c"
-  end
-
-  def appimage_revision
-    return 30
-  end
-
-  def stable_version_list
-    return %w(2.6 2.7 2.8 2.9 2.9a 3.0 3.0a 3.1 3.1a 3.1b 3.1c 3.2 3.2a)
-  end
-
-  def devel_version
-    return "3.3-rc"
-  end
-
-  def stable_version
-    return stable_version_list[-1]
-  end
-
-  def appimage_version
-    return "v#{stable_version}-eaw-appimage-0.1.8"
-  end
-
-  def commit
-    return commit_long[0..7]
-  end
-end
-
-if __FILE__ == $0 then
-  case ARGV[0]
-    when "commit_long";         puts TmuxM::commit_long
-    when "appimage_revision";   puts TmuxM::appimage_revision
-    when "appimage_version";    puts TmuxM::appimage_version
-    when "commit";              puts TmuxM::commit
-    when "stable_version_list"; puts TmuxM::stable_version_list.join(" ")
-    when "stable_version";      puts TmuxM::stable_version
-    when "devel_version";       puts TmuxM::devel_version
-  end
-
-  exit 0
-end
+require "lib/version"
 
 class TmuxAT34Next < Formula
   desc "Terminal multiplexer"
@@ -51,7 +9,8 @@ class TmuxAT34Next < Formula
 
   stable do
     tmux_version = "HEAD-#{TmuxM::commit}"
-    url "https://github.com/tmux/tmux/archive/#{TmuxM::commit_long}.zip"
+    url "https://github.com/tmux/tmux/archive/#{TmuxM::commit_long}.tar.gz"
+    sha256 TmuxM::commit_sha256
     version tmux_version
 
     def pick_diff(formula_path)
@@ -139,6 +98,31 @@ class TmuxAT34Next < Formula
     Example configuration has been installed to:
       #{opt_pkgshare}
     EOS
+  end
+
+  # For brew appimage-build
+  def apprun; <<~EOS
+    #!/bin/sh
+    #export APPDIR="/tmp/.mount-tmuxXXXXXX"
+    if [ "x${APPDIR}" = "x" ]; then
+      export APPDIR="$(dirname "$(readlink -f "${0}")")"
+    fi
+    export PATH="${APPDIR}/usr/bin/:${PATH:+:$PATH}"
+    export LD_LIBRARY_PATH="${APPDIR}/usr/lib/:${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+    export XDG_DATA_DIRS="${APPDIR}/usr/share/${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
+    export TERMINFO="${APPDIR}/usr/share/terminfo"
+    unset ARGV0
+
+    exec "tmux" "$@"
+    EOS
+  end
+
+  def exec_path_list
+    [opt_bin/"tmux"]
+  end
+
+  def pre_build_appimage(appdirpath, verbose)
+    system("cp -pRv #{Formula["z80oolong/tmux/tmux-ncurses@6.2"].opt_share}/terminfo #{appdirpath}/usr/share")
   end
 
   test do

@@ -1,4 +1,8 @@
-opt/releases/*
 opt/formula/*
-opt/BREW_UPDATE_TIME
+!opt/formula/.empty
+opt/releases/*
+!opt/releases/.empty
+appimage-tmux@*.rb
 *.AppImage
+.vagrant/*
+*.log
