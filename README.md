@@ -1,22 +1,19 @@
-# tmux-eaw-appimage -- EAW 対応 tmux を起動する AppImage パッケージファイル作成用の Dockerfile
+# tmux-eaw-appimage -- EAW 対応 tmux を起動する AppImage パッケージファイル作成用の Vagrantfile
 
 ## 概要
 
 [tmux 2.5][TMUX] 以降において、 Unicode の規格における東アジア圏の各種文字のうち、いわゆる "◎" や "★" 等の記号文字及び罫線文字等、 [East_Asian_Width 特性の値が A (Ambiguous) となる文字][EAWA] (以下、 [East Asian Ambiguous Character][EAWA]) が、日本語環境で文字幅を適切に扱うことが出来ずに表示が乱れる問題が発生しています。
 
-このリポジトリは、端末多重化ソフトウェアである [tmux][TMUX] において、Unicode の規格における東アジア圏の各種文字のうち、いわゆる "◎" や "★" 等の記号文字及び罫線文字等、 [East_Asian_Width 特性の値が A (Ambiguous) となる文字][EAWA] (以下、 [East Asian Ambiguous Character][EAWA]) が、日本語環境で文字幅を適切に扱うことが出来ずに表示が乱れる問題を修正するための差分ファイルを適用した [tmux][TMUX] を起動する [AppImage パッケージファイル][APPI]を生成するための Docker コンテナを構築する Dockerfile 等を含むリポジトリです。
+このリポジトリは、端末多重化ソフトウェアである [tmux][TMUX] において、Unicode の規格における東アジア圏の各種文字のうち、いわゆる "◎" や "★" 等の記号文字及び罫線文字等、 [East_Asian_Width 特性の値が A (Ambiguous) となる文字][EAWA] (以下、 [East Asian Ambiguous Character][EAWA]) が、日本語環境で文字幅を適切に扱うことが出来ずに表示が乱れる問題を修正するための差分ファイルを適用した [tmux][TMUX] を起動する [AppImage パッケージファイル][APPI]を生成するための [vagrant 仮想環境][VAGR]を構築する Vagrantfile 等を含むリポジトリです。
 
-即ち、本リポジトリに含まれる Dockerfile によって構築される Docker コンテナは、 "[East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]" を適用した端末多重化ソフトウェアである [tmux][TMUX] を起動するための [AppImage パッケージファイル][APPI]を生成する為の Docker コンテナです。
-
-なお、この Docker コンテナは、 Linux のディストリビューションの一つである [Debian Jessie][DEBI] をベースに、ソースコードのビルドに基づくパッケージの導入システムである [Linuxbrew][BREW] を導入した [Docker][DOCK] コンテナである [```debian-linuxbrew-container```][DDCK] に依存しています。本リポジトリを使用して [tmux][TMUX] の [AppImage パッケージファイル][APPI]を作成する前に、 [```debian-linuxbrew-container```][DDCK] を導入する必要があります。
+即ち、本リポジトリに含まれる Vagrantfile によって構築される仮想環境は、 "[East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]" を適用した端末多重化ソフトウェアである [tmux][TMUX] を起動するための [AppImage パッケージファイル][APPI]を生成する為の仮想環境です。
 
 ## 使用法
 
-まず最初に、 Docker コンテナの公式のドキュメントである "[Docker のインストール — Docker-docs-ja 17.06.Beta ドキュメント][DCK1]" のページ等を参考にして、 [tmux][TMUX] の [AppImage パッケージファイル][APPI]を生成するための端末に Docker コンテナ環境を構築します。
+まず最初に、 [tmux][TMUX] の [AppImage パッケージファイル][APPI]を生成するための端末に [Vagrant 環境][VAGR]を構築します。 Vagrant のインストールにあたっては、以下の web ページを参考にして下さい。
 
-次に、概要にて前述した通り、 Linux のディストリビューションの一つである [Debian Jessie][DEBI] をベースに、ソースコードのビルドに基づくパッケージの導入システムである [Linuxbrew][BREW] を導入した [Docker][DOCK] コンテナである [```debian-linuxbrew-container```][DDCK] を以下の ```README.md``` を参照して導入します。
-
-- [https://github.com/z80oolong/debian-linuxbrew-container/blob/master/README.md][DDK1]
+- [Download Vagrant][VDWN]
+- [Getting Started | Vagrant][VTUT]
 
 そして、本リポジトリ内のシェルスクリプト ```build-appimage.sh``` を以下の通りに起動します。
 
@@ -26,13 +23,7 @@
 
 シェルスクリプト ```build-appimage.sh``` の起動により、[East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]を適用した [tmux][TMUX] をビルドするための Docker コンテナが構築され、 Docker コンテナ内にて、 [tmux][TMUX] 及び [tmux][TMUX] に依存するライブラリ群等がビルドされ、 [tmux][TMUX] を起動するための [AppImage パッケージファイル][APPI]が生成されます。
 
-そして、シェルスクリプトが正常に終了すると、ディレクトリ ```./opt/release``` 以下に [AppImage パッケージファイル][APPI] ```tmux-eaw-*-x86_64.AppImage``` が生成されます。
-
-なお、ここで [AppImage パッケージファイル][APPI]を生成するための Docker イメージを再構築するには、オプション ```-u, --update``` を使用します。
-
-```
-  $ ./build-appimage.sh -u (Docker イメージを再構築して、 AppImage パッケージをビルド。)
-```
+そして、シェルスクリプトが正常に終了すると、ディレクトリ ```./opt/releases``` 以下に [AppImage パッケージファイル][APPI] ```tmux-eaw-*-x86_64.AppImage``` が生成されます。
 
 ## AppImage パッケージファイルの使用法
 
@@ -75,69 +66,17 @@
 
 本リポジトリは、 [East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]を適用した端末多重化ソフトウェア [tmux][TMUX] を起動するための [AppImage パッケージファイル][APPI]を生成するための Dockerfile 等を含むリポジトリであり、以下の各氏が著作権を有し、 [MIT ライセンス][MITL] に基づいて配布されるものとします。
 
-- [Nelson Enzo 氏][NELS]
 - [Z.OOL. (mailto:zool@zool.jpn.org)][ZOOL]
 
 本リポジトリの使用条件の詳細については、本リポジトリに同梱する ```LICENSE``` を参照して下さい。
-
-## 追記
-
-本リポジトリのオリジナルである [Nelson Enzo 氏による Dockerfile][NELT]の ```README.md``` の原文を以下の示します。
-
-----
-
-# Tmux AppImage
-
-### What is this?
-Dockerfile to create an AppImage of tmux.
-
-### Why use Docker?
-The advantages to doing it this way are:
-- Obtain consistent build results on any computer.
-- No need to install a slew of build packages on your own machine.
-- You can trust the tmux developers code, not some rando's AppImage distribution on the interwebz :p
-
-### How do build it?
-```
-## clone me
-git clone https://github.com/nelsonenzo/tmux-appimage.git
-
-## compile tmux from source by building container
-docker build . -t tmux
-
-## extract the appimage file
-docker create -ti --name tmuxcontainer tmux bash
-docker cp tmuxcontainer:/opt/releases/tmux-3.0a-x86_64.AppImage .
-docker rm -f tmuxcontainer
-```
-
-
-## To use AppImage
-move appimage to executable location in your $PATH
-```
-mv tmux.*AppImage /usr/local/bin/tmux
-
-tmux
-```
-
-### Where has the AppImage been tested to turn?
-It has been tested on these fine Linux platforms and will likely work for anything newer than centos 6.9 (which is a few years old now.) Please file an issue if you find otherwise or need support on a different platform.
-```
-ubuntu 18
-centos 6.9
-centos 7.6
-fedora 31
-```
-
-### What is the sauce that makes this work?
-The [Dockerfile](Dockerfile) contains all the magic ingredients to compile tmux.
-
-[./opt/build.sh](opt/build.sh) creates the AppImage from binary using linuxdeploy tool.
 
 <!-- 外部リンク一覧 -->
 
 [APPI]:https://appimage.org/
 [TMUX]:http://tmux.github.io/
+[VAGR]:https://www.vagrantup.com/
+[VDWN]:https://www.vagrantup.com/downloads
+[VTUT]:https://learn.hashicorp.com/collections/vagrant/getting-started
 [DEBI]:https://www.debian.org/
 [BREW]:https://linuxbrew.sh
 [DDCK]:https://github.com/z80oolong/debian-linuxbrew-container/
