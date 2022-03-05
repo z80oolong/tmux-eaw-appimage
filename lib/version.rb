@@ -21,11 +21,11 @@ module TmuxM
     return "60688afe9ce31b8ee9dc3339d4e06bf12e6391fe"
   end
 
-  COMMIT_SHA256 = %x{curl -s -L -o - https://github.com/tmux/tmux/archive/#{commit_long}.tar.gz | sha256sum -}.chomp.gsub(/^([0-9a-f]*).*/) { $1 } 
-
   def commit
     return commit_long[0..7]
   end
+
+  COMMIT_SHA256 = %x{curl -s -L -o - https://github.com/tmux/tmux/archive/#{commit_long}.tar.gz | sha256sum -}.chomp.gsub(/^([0-9a-f]*).*/) { $1 } 
 
   def commit_sha256
     return COMMIT_SHA256
@@ -36,7 +36,7 @@ module TmuxM
   end
 
   def appimage_version
-    return "v#{stable_version}-eaw-appimage-0.1.10"
+    return "v#{stable_version}-eaw-appimage-0.5.0"
   end
 
   def appimage_revision
