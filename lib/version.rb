@@ -36,11 +36,11 @@ module TmuxM
   end
 
   def appimage_version
-    return "v#{stable_version}-eaw-appimage-0.5.0"
+    return "v#{stable_version}-eaw-appimage-0.5.1"
   end
 
   def appimage_revision
-    return 31
+    return 32
   end
 
   def release_dir
