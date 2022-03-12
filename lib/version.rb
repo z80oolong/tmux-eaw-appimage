@@ -18,7 +18,7 @@ module TmuxM
   end
 
   def commit_long
-    return "60688afe9ce31b8ee9dc3339d4e06bf12e6391fe"
+    return "ee3f1d25d568a425420cf14ccba6a1b2a012f7dd"
   end
 
   def commit
