@@ -74,8 +74,10 @@
 
 <!-- 外部リンク一覧 -->
 
-[APPI]:https://appimage.org/
 [TMUX]:http://tmux.github.io/
+[APPI]:https://appimage.org/
+[SNAP]:https://snapcraft.io/
+[FLAT]:https://flatpak.org/
 [VAGR]:https://www.vagrantup.com/
 [VDWN]:https://www.vagrantup.com/downloads
 [VTUT]:https://learn.hashicorp.com/collections/vagrant/getting-started
