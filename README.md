@@ -4,6 +4,10 @@
 
 [tmux 2.5][TMUX] 以降において、 Unicode の規格における東アジア圏の各種文字のうち、いわゆる "◎" や "★" 等の記号文字及び罫線文字等、 [East_Asian_Width 特性の値が A (Ambiguous) となる文字][EAWA] (以下、 [East Asian Ambiguous Character][EAWA]) が、日本語環境で文字幅を適切に扱うことが出来ずに表示が乱れる問題が発生しています。
 
+また、 [AppImage][APPI] とは、 Linux 系 OS において、各種ディストリビューションの差異に関わらず、如何なる環境においてもアプリケーションの正常な動作を目指したアプリケーションの配布形式の一つです。同様な目的及び目標を持つアプリケーションの配布形式として、 [snap][SNAP] や [Flatpak][FLAT] 等が挙げられます。
+
+[AppImage][APPI] は、 [snap][SNAP] や [Flatpak][FLAT] と異なり、 root 権限を取ること無く、パッケージファイルとして配布されている [AppImage][APPI] ファイルに実行権限を付与し、 [AppImage][APPI] ファイルを直接実行することにより、適切にアプリケーションを実行させることが出来るのが特徴です。
+
 このリポジトリは、端末多重化ソフトウェアである [tmux][TMUX] において、Unicode の規格における東アジア圏の各種文字のうち、いわゆる "◎" や "★" 等の記号文字及び罫線文字等、 [East_Asian_Width 特性の値が A (Ambiguous) となる文字][EAWA] (以下、 [East Asian Ambiguous Character][EAWA]) が、日本語環境で文字幅を適切に扱うことが出来ずに表示が乱れる問題を修正するための差分ファイルを適用した [tmux][TMUX] を起動する [AppImage パッケージファイル][APPI]を生成するための [vagrant 仮想環境][VAGR]を構築する Vagrantfile 等を含むリポジトリです。
 
 即ち、本リポジトリに含まれる Vagrantfile によって構築される仮想環境は、 "[East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]" を適用した端末多重化ソフトウェアである [tmux][TMUX] を起動するための [AppImage パッケージファイル][APPI]を生成する為の仮想環境です。
@@ -27,16 +31,16 @@
 
 ## AppImage パッケージファイルの使用法
 
-前述で生成した [AppImage パッケージファイル][APPI] ```tmux-eaw-3.1c-x86_64.AppImage``` を用いて [tmux][TMUX] を起動するには、以下の通りにして  [AppImage パッケージファイル][APPI] ```tmux-eaw-3.1c-x86_64.AppImage``` にファイルの実行権限を付与して環境変数 ```PATH``` が示すディレクトリに配置します。
+前述で生成した [AppImage パッケージファイル][APPI] ```tmux-eaw-3.2a-x86_64.AppImage``` を用いて [tmux][TMUX] を起動するには、以下の通りにして  [AppImage パッケージファイル][APPI] ```tmux-eaw-3.2a-x86_64.AppImage``` にファイルの実行権限を付与して環境変数 ```PATH``` が示すディレクトリに配置します。
 
-そして、以下のようにして ```tmux-eaw-3.1c-x86_64.AppImage``` から ```tmux``` へシンボリックリンクを張ると、コマンドラインから ```tmux``` と入力することで、 [East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]を適用した [tmux][TMUX] が起動します。
+そして、以下のようにして ```tmux-eaw-3.2a-x86_64.AppImage``` から ```tmux``` へシンボリックリンクを張ると、コマンドラインから ```tmux``` と入力することで、 [East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]を適用した [tmux][TMUX] が起動します。
 
 ```
   $ cd opt/release
-  $ chmod u+x ./tmux-eaw-3.1c-x86_64.AppImage
-  $ sudo cp -pRv ./tmux-eaw-3.1c-x86_64.AppImage /usr/local/bin    # (一例として /usr/local/bin 以下に導入する場合を示す。)
+  $ chmod u+x ./tmux-eaw-3.2a-x86_64.AppImage
+  $ sudo cp -pRv ./tmux-eaw-3.2a-x86_64.AppImage /usr/local/bin    # (一例として /usr/local/bin 以下に導入する場合を示す。)
   $ cd /usr/local/bin
-  $ sudo ln -sf tmux-eaw-3.1c-x86_64.AppImage tmux
+  $ sudo ln -sf tmux-eaw-3.2a-x86_64.AppImage tmux
   ...
   $ tmux
   ...
@@ -53,20 +57,18 @@
 
 ## 謝辞
 
-まず最初に、[本リポジトリの元となった Dockerfile 等][TAPP]を作成された [Nelson Enzo 氏][NELS]に心より感謝致します。
+まず最初に、各種ディストリビューションの差異に関わらず、如何なる環境においてもアプリケーションの正常な動作を目指したアプリケーションの配布形式である [AppImage][APPI] を開発した [AppImage][APPI] の開発コミュニティの各位に心より感謝致します。
 
-また、 [tmux][TMUX] に適用するための [East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]に関しては、以下の各氏の協力及びソースコードの参考を得ました。以下の各氏に心より感謝致します。
+そして、 [tmux][TMUX] に適用するための [East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]に関しては、以下の各氏の協力及びソースコードの参考を得ました。以下の各氏に心より感謝致します。
 
 - [koie-hidetaka 氏][KOIE]
 - [Markus Kuhn 氏][DRMK]
 
-最後に、 [tmux][TMUX] の作者である [Nicholas Marriott 氏][NICM]を初めとする [tmux の開発コミュニティ][TMUX]及び [tmux][TMUX] に関わる全ての人々に心より感謝致します。
+最後に、 [tmux][TMUX] の作者である [Nicholas Marriott 氏][NICM]を初めとする [tmux の開発コミュニティ][TMUX]及び [tmux][TMUX] と [AppImage][APPI] に関わる全ての人々に心より感謝致します。
 
 ## 使用条件
 
-本リポジトリは、 [East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]を適用した端末多重化ソフトウェア [tmux][TMUX] を起動するための [AppImage パッケージファイル][APPI]を生成するための Dockerfile 等を含むリポジトリであり、以下の各氏が著作権を有し、 [MIT ライセンス][MITL] に基づいて配布されるものとします。
-
-- [Z.OOL. (mailto:zool@zool.jpn.org)][ZOOL]
+本リポジトリは、 [East Asian Ambiguous Character を全角文字の幅で表示する差分ファイル][GST1]を適用した端末多重化ソフトウェア [tmux][TMUX] を起動するための [AppImage パッケージファイル][APPI]を生成するための Vagrant 仮想環境の構築を行う Vagrantfile 等を含むリポジトリであり、 [Z.OOL. (mailto:zool@zool.jpn.org)][ZOOL] が著作権を有し、 [MIT ライセンス][MITL] に基づいて配布されるものとします。
 
 本リポジトリの使用条件の詳細については、本リポジトリに同梱する ```LICENSE``` を参照して下さい。
 
