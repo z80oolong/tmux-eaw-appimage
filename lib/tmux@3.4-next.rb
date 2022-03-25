@@ -5,24 +5,16 @@ require "lib/version"
 class TmuxAT34Next < Formula
   desc "Terminal multiplexer"
   homepage "https://tmux.github.io/"
+  license "ISC"
   revision 6
 
   stable do
-    tmux_version = "HEAD-#{TmuxM::commit}"
-    url "https://github.com/tmux/tmux/archive/#{TmuxM::commit_long}.tar.gz"
-    sha256 TmuxM::commit_sha256
+    tmux_version = "HEAD-#{Config::commit}"
+    url "https://github.com/tmux/tmux/archive/#{Config::commit_long}.tar.gz"
+    sha256 Config::commit_sha256
     version tmux_version
 
-    def pick_diff(formula_path)
-      lines = formula_path.each_line.to_a.inject([]) do |result, line|
-        result.push(line) if ((/^__END__/ === line) || result.first)
-        result
-      end
-      lines.shift
-      return lines.join("")
-    end
-
-    patch :p1, pick_diff(Formula["z80oolong/tmux/tmux"].path)
+    patch :p1, Formula["z80oolong/tmux/tmux"].diff_data
 
     depends_on "automake" => :build
     depends_on "autoconf" => :build
@@ -84,6 +76,8 @@ class TmuxAT34Next < Formula
   end
 
   def fix_rpath(binname, append_list, delete_list)
+    return unless OS.linux?
+
     delete_list_hash = {}
     rpath = %x{#{Formula["patchelf"].opt_bin}/patchelf --print-rpath #{binname}}.chomp.split(":")
 
@@ -98,31 +92,6 @@ class TmuxAT34Next < Formula
     Example configuration has been installed to:
       #{opt_pkgshare}
     EOS
-  end
-
-  # For brew appimage-build
-  def apprun; <<~EOS
-    #!/bin/sh
-    #export APPDIR="/tmp/.mount-tmuxXXXXXX"
-    if [ "x${APPDIR}" = "x" ]; then
-      export APPDIR="$(dirname "$(readlink -f "${0}")")"
-    fi
-    export PATH="${APPDIR}/usr/bin/:${PATH:+:$PATH}"
-    export LD_LIBRARY_PATH="${APPDIR}/usr/lib/:${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-    export XDG_DATA_DIRS="${APPDIR}/usr/share/${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
-    export TERMINFO="${APPDIR}/usr/share/terminfo"
-    unset ARGV0
-
-    exec "tmux" "$@"
-    EOS
-  end
-
-  def exec_path_list
-    [opt_bin/"tmux"]
-  end
-
-  def pre_build_appimage(appdirpath, verbose)
-    system("cp -pRv #{Formula["z80oolong/tmux/tmux-ncurses@6.2"].opt_share}/terminfo #{appdirpath}/usr/share")
   end
 
   test do

@@ -1,4 +1,4 @@
-class TmuxAT29a
+class TmuxBuilder < AppImage::Builder
   # For brew appimage-build
   def apprun; <<~EOS
     #!/bin/sh
@@ -20,7 +20,7 @@ class TmuxAT29a
     return [opt_bin/"tmux"]
   end
 
-  def pre_build_appimage(appdirpath, verbose)
-    system("cp -pRv #{Formula["z80oolong/tmux/tmux-ncurses@6.2"].opt_share}/terminfo #{appdirpath}/usr/share")
+  def pre_build_appimage(appdir, verbose)
+    system("cp -pRv #{Formula["z80oolong/tmux/tmux-ncurses@6.2"].opt_share}/terminfo #{appdir}/usr/share")
   end
 end

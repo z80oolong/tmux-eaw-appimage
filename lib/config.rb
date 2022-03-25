@@ -1,4 +1,4 @@
-module TmuxM
+module Config
   module_function
 
   def stable_version_list
@@ -44,14 +44,54 @@ module TmuxM
   end
 
   def release_dir
-    "/vagrant/opt/releases"
+    return "/vagrant/opt/releases"
   end
 
   def formula_dir
-    "/vagrant/opt/formula"
+    return "/vagrant/opt/formula"
   end
 
   def lib_dir
-    "/vagrant/lib"
+    return "/vagrant/lib"
+  end
+
+  def appimage_builder_rb
+    return "tmux-builder.rb"
+  end
+
+  def appimage_name
+    return "tmux-eaw"
+  end
+
+  def appimage_command
+    return "tmux"
+  end
+
+  def appimage_arch
+    return "x86_64"
+  end
+
+  def formula_tap
+    return "z80oolong/tmux"
+  end
+
+  def formula_name
+    return "tmux"
+  end
+
+  def formula_fullname
+    return "#{formula_tap}/#{formula_name}"
+  end
+
+  def formula_desc
+    return "AppImage package of Terminal multiplexer"
+  end
+
+  def formula_homepage
+    return "https://tmux.github.io/"
+  end
+
+  def formula_download_url
+    return "https://github.com/z80oolong/tmux-eaw-appimage/releases/download"
   end
 end

@@ -1,38 +1,41 @@
 Vagrant.configure("2") do |config|
-  TmuxM::stable_version_list.each do |v|
+  Config::stable_version_list.each do |v|
     config.vm.provision "shell", privileged: false, inline: %[
-      brew appimage-install -O -n appimage-tmux@#{v} -c tmux #{TmuxM::release_dir}/tmux-eaw-#{v}-x86_64.AppImage | \
-        sed -e 's|#desc ".*"|desc "AppImage package of Terminal multiplexer"|g' \
-            -e 's|#homepage ".*"|homepage "https://tmux.github.io/"|g' \
-            -e 's|url ".*"|url "https://github.com/z80oolong/tmux-eaw-appimage/releases/download/#{TmuxM::appimage_version}/tmux-eaw-#{v}-x86_64.AppImage"|g' \
+      brew appimage-install -O -n appimage-#{Config::formula_name}@#{v} -c #{Config::appimage_command} \
+           #{Config::release_dir}/#{Config::appimage_name}-#{v}-#{Config::appimage_arch}.AppImage | \
+        sed -e 's|#desc ".*"|desc "#{Config::formula_desc}"|g' \
+            -e 's|#homepage ".*"|homepage "#{Config::formula_homepage}"|g' \
+            -e 's|url ".*"|url "#{Config::formula_download_url}/#{Config::appimage_version}/#{Config::appimage_name}-#{v}-#{Config::appimage_arch}.AppImage"|g' \
             -e 's|version ".*"|version "#{v}"|g' \
-            -e 's|#revision 0|revision #{TmuxM::appimage_revision}|g' \
-	    > #{TmuxM::formula_dir}/appimage-tmux@#{v}.rb
+            -e 's|#revision 0|revision #{Config::appimage_revision}|g' \
+	    > #{Config::formula_dir}/appimage-#{Config::formula_name}@#{v}.rb
     ]
   end
 
-  if TmuxM::devel_version_list[0] then
-    v1dev = TmuxM::devel_version
-    v2dev = TmuxM::devel_version_list[0]
+  if Config::devel_version_list[0] then
+    v1dev = Config::devel_version
+    v2dev = Config::devel_version_list[0]
     config.vm.provision "shell", privileged: false, inline: %[
-      brew appimage-install -O -n appimage-tmux@#{v2dev} -c tmux #{TmuxM::release_dir}/tmux-eaw-#{v1dev}-x86_64.AppImage | \
-        sed -e 's|#desc ".*"|desc "AppImage package of Terminal multiplexer"|g' \
-            -e 's|#homepage ".*"|homepage "https://tmux.github.io/"|g' \
-            -e 's|url ".*"|url "https://github.com/z80oolong/tmux-eaw-appimage/releases/download/#{TmuxM::appimage_version}/tmux-eaw-#{v1dev}-x86_64.AppImage"|g' \
+      brew appimage-install -O -n appimage-#{Config::formula_name}@#{v2dev} -c #{Config::appimage_command} \
+           #{Config::release_dir}/#{Config::appimage_name}-#{v1dev}-#{Config::appimage_arch}.AppImage | \
+        sed -e 's|#desc ".*"|desc "#{Config::formula_desc}"|g' \
+            -e 's|#homepage ".*"|homepage "#{Config::formula_homepage}"|g' \
+            -e 's|url ".*"|url "#{Config::formula_download_url}/#{Config::appimage_version}/#{Config::appimage_name}-#{v1dev}-#{Config::appimage_arch}.AppImage"|g' \
             -e 's|version ".*"|version "#{v1dev}"|g' \
-            -e 's|#revision 0|revision #{TmuxM::appimage_revision}|g' \
-            > #{TmuxM::formula_dir}/appimage-tmux@#{v2dev}.rb
+            -e 's|#revision 0|revision #{Config::appimage_revision}|g' \
+            > #{Config::formula_dir}/appimage-#{Config::formula_name}@#{v2dev}.rb
     ]
   end
 
-  vhead = "HEAD-#{TmuxM::commit}"
+  vhead = "HEAD-#{Config::commit}"
   config.vm.provision "shell", privileged: false, inline: %[
-    brew appimage-install -O -n appimage-tmux@#{TmuxM::head_version} -c tmux #{TmuxM::release_dir}/tmux-eaw-#{vhead}-x86_64.AppImage | \
-      sed -e 's|#desc ".*"|desc "AppImage package of Terminal multiplexer"|g' \
-          -e 's|#homepage ".*"|homepage "https://tmux.github.io/"|g' \
-          -e 's|url ".*"|url "https://github.com/z80oolong/tmux-eaw-appimage/releases/download/#{TmuxM::appimage_version}/tmux-eaw-#{vhead}-x86_64.AppImage"|g' \
+    brew appimage-install -O -n appimage-#{Config::formula_name}@#{Config::head_version} -c #{Config::appimage_command} \
+         #{Config::release_dir}/#{Config::appimage_name}-#{vhead}-#{Config::appimage_arch}.AppImage | \
+      sed -e 's|#desc ".*"|desc "#{Config::formula_desc}"|g' \
+          -e 's|#homepage ".*"|homepage "#{Config::formula_homepage}"|g' \
+          -e 's|url ".*"|url "#{Config::formula_download_url}/#{Config::appimage_version}/#{Config::appimage_name}-#{vhead}-#{Config::appimage_arch}.AppImage"|g' \
           -e 's|version ".*"|version "#{vhead}"|g' \
-          -e 's|#revision 0|revision #{TmuxM::appimage_revision}|g' \
-          > #{TmuxM::formula_dir}/appimage-tmux@#{TmuxM::head_version}.rb
+          -e 's|#revision 0|revision #{Config::appimage_revision}|g' \
+          > #{Config::formula_dir}/appimage-#{Config::formula_name}@#{Config::head_version}.rb
   ]
 end

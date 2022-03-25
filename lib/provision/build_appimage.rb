@@ -1,20 +1,22 @@
 Vagrant.configure("2") do |config|
-  TmuxM::stable_version_list.each do |v|
+  Config::stable_version_list.each do |v|
     config.vm.provision "shell", privileged: false, inline: %[
-      brew appimage-build -v -o ./tmux-eaw-#{v}-x86_64.AppImage -r #{TmuxM::lib_dir}/appimage-build/tmux@#{v}.rb z80oolong/tmux/tmux@#{v}
+      brew appimage-build -v -o ./#{Config::appimage_name}-#{v}-#{Config::appimage_arch}.AppImage \
+           -r #{Config::lib_dir}/#{Config::appimage_builder_rb} #{Config::formula_fullname}@#{v}
     ]
   end
 
-  if TmuxM::devel_version_list[0] then
+  if Config::devel_version_list[0] then
     config.vm.provision "shell", privileged: false, inline: %[
-      brew appimage-build -v -o ./tmux-eaw-#{TmuxM::devel_version}-x86_64.AppImage \
-           -r #{TmuxM::lib_dir}/appimage-build/tmux@#{TmuxM::devel_version_list[0]}.rb z80oolong/tmux/tmux@#{TmuxM::devel_version_list[0]}
+      brew appimage-build -v -o ./#{Config::appimage_name}-#{Config::devel_version}-#{Config::appimage_arch}.AppImage \
+           -r #{Config::lib_dir}/#{Config::appimage_builder_rb} #{Config::formula_fullname}@#{Config::devel_version_list[0]}
     ]
   end
 
   config.vm.provision "shell", privileged: false, inline: %[
-    brew appimage-build -v -o ./tmux-eaw-HEAD-#{TmuxM::commit}-x86_64.AppImage #{TmuxM::lib_dir}/tmux@#{TmuxM::head_version}.rb
+    brew appimage-build -v -o ./#{Config::appimage_name}-HEAD-#{Config::commit}-#{Config::appimage_arch}.AppImage \
+         -r #{Config::lib_dir}/#{Config::appimage_builder_rb} #{Config::lib_dir}/#{Config::formula_name}@#{Config::head_version}.rb
   ]
 
-  config.vm.provision "shell", privileged: false, inline: "mv ./tmux-eaw-*-x86_64.AppImage #{TmuxM::release_dir}"
+  config.vm.provision "shell", privileged: false, inline: "mv ./*.AppImage #{Config::release_dir}"
 end

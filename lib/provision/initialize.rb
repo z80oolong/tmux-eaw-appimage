@@ -1,6 +1,6 @@
 Vagrant.configure("2") do |config|
-  tmux_versions = TmuxM::stable_version_list + TmuxM::devel_version_list
-  tmuxs = (tmux_versions.map {|v| "z80oolong/tmux/tmux@#{v}" }).join(" ")
+  formula_versions = Config::stable_version_list + Config::devel_version_list
+  formulae = (formula_versions.map {|v| "#{Config::formula_fullname}@#{v}" }).join(" ")
 
   config.vm.provision "shell", privileged: false, inline: %[
     if [ ! -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
@@ -14,9 +14,9 @@ Vagrant.configure("2") do |config|
       eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && \
       brew install gcc && \
       brew tap z80oolong/appimage && \
-      brew tap z80oolong/tmux && \
-      brew install --only-dependencies #{tmuxs} && \
-      brew install --only-dependencies --formula #{TmuxM::lib_dir}/tmux@#{TmuxM::head_version}.rb
+      brew tap #{Config::formula_tap} && \
+      brew install --only-dependencies #{formulae} && \
+      brew install --only-dependencies --formula #{Config::lib_dir}/#{Config::formula_name}@#{Config::head_version}.rb
     fi
   ]
 end

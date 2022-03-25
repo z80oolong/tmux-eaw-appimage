@@ -1,6 +1,6 @@
 $:.unshift((Pathname.new(__FILE__).dirname).realpath.to_s)
 
-require "lib/version"
+require "lib/config"
 require "lib/provision/initialize"
 require "lib/provision/reinstall"
 require "lib/provision/build_appimage"
