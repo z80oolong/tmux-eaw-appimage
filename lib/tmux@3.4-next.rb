@@ -1,6 +1,6 @@
 $:.unshift((Pathname.new(__FILE__).dirname/"..").realpath.to_s)
 
-require "lib/version"
+require "lib/config"
 
 class TmuxAT34Next < Formula
   desc "Terminal multiplexer"
@@ -31,6 +31,7 @@ class TmuxAT34Next < Formula
   option "without-utf8-cjk", "Build without using East asian Ambiguous Width Character in tmux."
   option "without-utf8-emoji", "Build without using Emoji Character in tmux."
   option "without-pane-border-acs-ascii", "Build without using ACS ASCII as pane border in tmux."
+  option "with-static-link", "Build tmux with static link."
 
   resource "completion" do
     url "https://raw.githubusercontent.com/imomaliev/tmux-bash-completion/homebrew_1.0.0/completions/tmux"
@@ -60,10 +61,11 @@ class TmuxAT34Next < Formula
     args = %W[
       --disable-Dependency-tracking
       --prefix=#{prefix}
-      --sysconfdir=#{etc}
+      --sysconfdir=$$APPDIR/etc/tmux.conf:$$HOMEBREW_PREFIX/etc
     ]
 
     args << "--enable-utf8proc" if build.with?("utf8proc")
+    args << "--enable-static"   if build.with?("static-link")
 
     ENV.append "LDFLAGS", "-lresolv"
     system "./configure", *args

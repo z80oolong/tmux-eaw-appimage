@@ -18,17 +18,19 @@ module Config
   end
 
   def commit_long
-    return "ee3f1d25d568a425420cf14ccba6a1b2a012f7dd"
+    return "ac16f2c641d3d16276f3a41b2aae26832ad5fd9c"
   end
 
   def commit
     return commit_long[0..7]
   end
 
-  COMMIT_SHA256 = %x{curl -s -L -o - https://github.com/tmux/tmux/archive/#{commit_long}.tar.gz | sha256sum -}.chomp.gsub(/^([0-9a-f]*).*/) { $1 } 
-
   def commit_sha256
-    return COMMIT_SHA256
+    @@curl ||= %x{which curl}.chomp!
+    @@sha256sum ||= %x{which sha256sum}.chomp!
+    @@archive_url ||= "https://github.com/tmux/tmux/archive"
+    @@commit_sha256 ||= %x{#{@@curl} -s -L -o - #{@@archive_url}/#{commit_long}.tar.gz | #{@@sha256sum} -}.chomp.gsub(/^([0-9a-f]*).*/) { $1 }
+    return @@commit_sha256
   end
 
   def head_version
@@ -36,11 +38,11 @@ module Config
   end
 
   def appimage_version
-    return "v#{stable_version}-eaw-appimage-0.5.1"
+    return "v#{stable_version}-eaw-appimage-0.5.2"
   end
 
   def appimage_revision
-    return 32
+    return 34
   end
 
   def release_dir
