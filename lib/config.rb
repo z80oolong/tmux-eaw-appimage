@@ -2,7 +2,7 @@ module Config
   module_function
 
   def stable_version_list
-    return %w(2.6 2.7 2.8 2.9 2.9a 3.0 3.0a 3.1 3.1a 3.1b 3.1c 3.2 3.2a)
+    return %w(2.6 2.7 2.8 2.9 2.9a 3.0 3.0a 3.1 3.1a 3.1b 3.1c 3.2 3.2a 3.3 3.3a)
   end
 
   def stable_version
@@ -10,15 +10,15 @@ module Config
   end
 
   def devel_version_list
-    return ["3.3"]
+    return []
   end
 
   def devel_version
-    return "3.3-rc"
+    return ""
   end
 
   def commit_long
-    return "58d1a206c6ae6b33059ea6b469c21dad92ea0841"
+    return "67960dcc9ad3ed0bde23c1a7c8202c9b2aeec34f"
   end
 
   def commit
@@ -38,11 +38,11 @@ module Config
   end
 
   def appimage_version
-    return "v#{stable_version}-eaw-appimage-0.6.1"
+    return "v#{stable_version}-eaw-appimage-0.1.0"
   end
 
   def appimage_revision
-    return 36
+    return 37
   end
 
   def release_dir
