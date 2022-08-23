@@ -1,7 +1,7 @@
 Vagrant.configure("2") do |config|
   Config::stable_version_list.each do |v|
     config.vm.provision "shell", privileged: false, inline: %[
-      brew appimage-install -O -n appimage-#{Config::formula_name}@#{v} -c #{Config::appimage_command} \
+      brew appimage-install -O -N appimage-#{Config::formula_name}@#{v} -V #{v} -c #{Config::appimage_command} \
            #{Config::release_dir}/#{Config::appimage_name}-#{v}-#{Config::appimage_arch}.AppImage | \
         sed -e 's|#desc ".*"|desc "#{Config::formula_desc}"|g' \
             -e 's|#homepage ".*"|homepage "#{Config::formula_homepage}"|g' \
@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
     v1dev = Config::devel_version
     v2dev = Config::devel_version_list[0]
     config.vm.provision "shell", privileged: false, inline: %[
-      brew appimage-install -O -n appimage-#{Config::formula_name}@#{v2dev} -c #{Config::appimage_command} \
+      brew appimage-install -O -N appimage-#{Config::formula_name}@#{v2dev} -V #{v2dev} -c #{Config::appimage_command} \
            #{Config::release_dir}/#{Config::appimage_name}-#{v1dev}-#{Config::appimage_arch}.AppImage | \
         sed -e 's|#desc ".*"|desc "#{Config::formula_desc}"|g' \
             -e 's|#homepage ".*"|homepage "#{Config::formula_homepage}"|g' \
@@ -29,7 +29,7 @@ Vagrant.configure("2") do |config|
 
   vhead = "HEAD-#{Config::commit}"
   config.vm.provision "shell", privileged: false, inline: %[
-    brew appimage-install -O -n appimage-#{Config::formula_name}@#{Config::head_version} -c #{Config::appimage_command} \
+    brew appimage-install -O -N appimage-#{Config::formula_name}@#{Config::head_version} -V #{vhead} -c #{Config::appimage_command} \
          #{Config::release_dir}/#{Config::appimage_name}-#{vhead}-#{Config::appimage_arch}.AppImage | \
       sed -e 's|#desc ".*"|desc "#{Config::formula_desc}"|g' \
           -e 's|#homepage ".*"|homepage "#{Config::formula_homepage}"|g' \
