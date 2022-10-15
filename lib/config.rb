@@ -27,7 +27,7 @@ module Config
 
   def current_version
     if stable_version? then
-      return "3.2a"
+      return "3.3"
     else
       return "HEAD-#{commit}"
     end
