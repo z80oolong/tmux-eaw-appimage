@@ -11,7 +11,6 @@ class TmuxAT34Next < Formula
   stable do
     tmux_version = "HEAD-#{Config::commit}"
     url "https://github.com/tmux/tmux/archive/#{Config::commit_long}.tar.gz"
-    sha256 Config::commit_sha256
     version tmux_version
 
     patch :p1, Formula["z80oolong/tmux/tmux"].diff_data
@@ -19,6 +18,7 @@ class TmuxAT34Next < Formula
     depends_on "automake" => :build
     depends_on "autoconf" => :build
     depends_on "bison" => :build
+    depends_on "patchelf" => :build
   end
 
   depends_on "z80oolong/tmux/tmux-libevent@2.2"
