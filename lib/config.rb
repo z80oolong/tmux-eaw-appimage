@@ -2,7 +2,7 @@ module Config
   module_function
 
   def stable_version?
-    false
+    true
   end
 
   def appimage_tap_name
