@@ -65,6 +65,10 @@ class TmuxBuilder < AppImage::Builder
     EOS
   end
 
+  def exclude_list
+    return ["libc.so.6"]
+  end
+
   def exec_path_list
     return [opt_bin/"tmux"]
   end
