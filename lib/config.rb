@@ -52,7 +52,7 @@ module Config
   end
 
   def commit_long
-    return "1536b7e206e51488c37379df22b8c58ef3febc28"
+    return "70ff8cfe1e06987501a55a32df31d1f69acd2f99"
   end
 
   def commit
