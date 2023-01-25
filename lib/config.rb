@@ -35,11 +35,11 @@ module Config
     return "#{current_formula_name}-eaw"
   end
 
-  def current_version
+  def current_version_list
     if stable_version? then
-      return "3.3a"
+      return ["3.3a"]
     else
-      return "HEAD-#{commit}"
+      return ["HEAD-#{commit}"]
     end
   end
 

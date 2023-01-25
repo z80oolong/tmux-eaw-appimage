@@ -10,7 +10,9 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", privileged: false, inline: "brew upgrade"
 
   if Config::stable_version? then
-    config.vm.provision "shell", privileged: false, inline: "brew reinstall #{Config::current_formula_name}@#{Config::current_version}"
+    Config::current_version_list.each do |version|
+      config.vm.provision "shell", privileged: false, inline: "brew reinstall #{Config::current_formula_name}@#{version}"
+    end
   else
     config.vm.provision "shell", privileged: false, inline: %[
       brew reinstall --formula #{Config::lib_dir}/#{Config::current_formula_name}@#{Config::current_head_formula_version}.rb
