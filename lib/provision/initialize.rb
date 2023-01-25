@@ -3,7 +3,7 @@ Vagrant.configure("2") do |config|
     if [ ! -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
       sudo apt-get update && \
       sudo apt-get -y upgrade && \
-      sudo apt-get -y install build-essential ruby && \
+      sudo apt-get -y install build-essential ruby curl git && \
       env NONINTERACTIVE=1 \
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
       echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.profile && \

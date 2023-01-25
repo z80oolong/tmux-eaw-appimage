@@ -5,6 +5,16 @@ module Config
     true
   end
 
+  def current_vm_provider
+    return "lxc"
+    #return "libvirt"
+  end
+
+  def current_libvirt_driver
+    return "qemu"
+    #return "kvm"
+  end
+
   def appimage_tap_name
     return "z80oolong/appimage"
   end
@@ -52,7 +62,7 @@ module Config
   end
 
   def commit_long
-    return "9ef854f5a9112a7d50c382dec403432dea2c3579"
+    return "f5af3cfb211c12897b15e3b5a3b29c4bbb0493a8"
   end
 
   def commit
@@ -60,7 +70,7 @@ module Config
   end
 
   def current_appimage_revision
-    return 50
+    return 51
   end
 
   def release_dir

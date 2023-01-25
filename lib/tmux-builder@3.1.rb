@@ -22,7 +22,14 @@ class TmuxBuilder < AppImage::Builder
     export TERMINFO="${APPDIR}/usr/share/terminfo"
     unset ARGV0
 
-    exec "tmux" "$@"
+    TMUX="${APPDIR}/usr/bin/tmux"
+    LDSO="${APPDIR}/usr/bin/ld.so"
+
+    if [ -x "${LDSO}" ] ; then
+      exec "${LDSO}" "${TMUX}" "$@"
+    else
+      exec "${TMUX}" "$@"
+    fi
     EOS
   end
 
@@ -63,10 +70,6 @@ class TmuxBuilder < AppImage::Builder
     #set -g status-right "#(date +'%Y/%m/%d %H:%M')"
     #set -g default-terminal "screen-256color"
     EOS
-  end
-
-  def exclude_list
-    return ["libc.so.6"]
   end
 
   def exec_path_list

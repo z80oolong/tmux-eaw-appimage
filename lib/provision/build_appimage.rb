@@ -1,4 +1,6 @@
 Vagrant.configure("2") do |config|
+  config.vm.provision "shell", privileged: false, inline: "brew reinstall --with-extract #{Config::appimage_tap_name}/appimagetool"
+  config.vm.provision "shell", privileged: false, inline: "brew reinstall #{Config::appimage_tap_name}/appimage-runtime"
   if Config::stable_version? then
     config.vm.provision "shell", privileged: false, inline: %[
       brew appimage-build -v -o ./#{Config::current_appimage_name}-#{Config::current_version}-#{Config::appimage_arch}.AppImage \
