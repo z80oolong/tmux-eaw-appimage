@@ -5,6 +5,26 @@ module Config
     true
   end
 
+  def current_vm_provider
+    return "lxc"
+    #return "libvirt"
+  end
+
+  def current_libvirt_driver
+    return "qemu"
+    #return "kvm"
+  end
+
+  def current_vm_provider
+    return "lxc"
+    #return "libvirt"
+  end
+
+  def current_libvirt_driver
+    return "qemu"
+    #return "kvm"
+  end
+
   def appimage_tap_name
     return "z80oolong/appimage"
   end
@@ -25,11 +45,11 @@ module Config
     return "#{current_formula_name}-eaw"
   end
 
-  def current_version
+  def current_version_list
     if stable_version? then
-      return "3.3"
+      return %w[2.6 2.7 2.8 2.9 2.9a 3.0 3.0a 3.1 3.1a 3.1b 3.1c 3.2 3.2a 3.3]
     else
-      return "HEAD-#{commit}"
+      return ["HEAD-#{commit}"]
     end
   end
 
@@ -52,7 +72,7 @@ module Config
   end
 
   def commit_long
-    return "9ef854f5a9112a7d50c382dec403432dea2c3579"
+    return "f5af3cfb211c12897b15e3b5a3b29c4bbb0493a8"
   end
 
   def commit
@@ -60,7 +80,7 @@ module Config
   end
 
   def current_appimage_revision
-    return 50
+    return 51
   end
 
   def release_dir
