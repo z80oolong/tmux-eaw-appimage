@@ -70,7 +70,7 @@ module Config
   end
 
   def current_appimage_revision
-    return 51
+    return 52
   end
 
   def release_dir
