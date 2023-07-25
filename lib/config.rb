@@ -62,7 +62,7 @@ module Config
   end
 
   def commit_long
-    return "f5af3cfb211c12897b15e3b5a3b29c4bbb0493a8"
+    return "fda393773485c7c9236e4cf0c18668ab809d2574"
   end
 
   def commit
@@ -70,7 +70,7 @@ module Config
   end
 
   def current_appimage_revision
-    return 52
+    return 53
   end
 
   def release_dir
