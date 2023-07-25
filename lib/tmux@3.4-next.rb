@@ -55,6 +55,7 @@ class TmuxAT34Next < Formula
       --disable-Dependency-tracking
       --prefix=#{prefix}
       --sysconfdir=$$APPDIR/etc/tmux.conf:$$HOMEBREW_PREFIX/etc
+      --enable-sixel
     ]
 
     args << "--enable-utf8proc" if build.with?("utf8proc")
