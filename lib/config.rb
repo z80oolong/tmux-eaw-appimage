@@ -7,12 +7,10 @@ module Config
 
   def current_vm_provider
     return "lxc"
-    #return "libvirt"
   end
 
   def current_libvirt_driver
     return "qemu"
-    #return "kvm"
   end
 
   def appimage_tap_name
@@ -70,7 +68,7 @@ module Config
   end
 
   def current_appimage_revision
-    return 53
+    return 54
   end
 
   def release_dir

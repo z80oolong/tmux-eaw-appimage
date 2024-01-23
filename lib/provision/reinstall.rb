@@ -11,11 +11,11 @@ Vagrant.configure("2") do |config|
 
   if Config::stable_version? then
     Config::current_version_list.each do |version|
-      config.vm.provision "shell", privileged: false, inline: "brew reinstall #{Config::current_formula_name}@#{version}"
+      config.vm.provision "shell", privileged: false, inline: "env HOMEBREW_ARCH='x86-64' brew reinstall #{Config::current_formula_name}@#{version}"
     end
   else
     config.vm.provision "shell", privileged: false, inline: %[
-      brew reinstall --formula #{Config::lib_dir}/#{Config::current_formula_name}@#{Config::current_head_formula_version}.rb
+      env HOMEBREW_ARCH='x86-64' brew reinstall --formula #{Config::lib_dir}/#{Config::current_formula_name}@#{Config::current_head_formula_version}.rb
     ]
   end
 end
