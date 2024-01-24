@@ -11,10 +11,12 @@ class TmuxBuilder < AppImage::Builder
       export TMUX_CONF='$APPDIR/etc/tmux.conf:~/.tmux.conf:$XDG_CONFIG_HOME/tmux/tmux.conf:~/.config/tmux/tmux.conf'
       export PATH="${APPDIR}/usr/bin/:${HOMEBREW_PREFIX}/bin/:${PATH:+:$PATH}"
       export XDG_DATA_DIRS="${APPDIR}/usr/share/:${HOMEBREW_PREFIX}/share/:${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
+      export LOCPATH="${HOMEBREW_PREFIX}/opt/glibc/lib/locale:${HOME}/.local/lib/locale:/usr/lib/locale:${APPDIR}/usr/lib/locale"
     else
       export TMUX_CONF='$APPDIR/etc/tmux.conf:$HOMEBREW_PREFIX/etc/tmux.conf:~/.tmux.conf:$XDG_CONFIG_HOME/tmux/tmux.conf:~/.config/tmux/tmux.conf'
       export PATH="${APPDIR}/usr/bin/:${PATH:+:$PATH}"
       export XDG_DATA_DIRS="${APPDIR}/usr/share/:${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
+      export LOCPATH="${HOME}/.local/lib/locale:/usr/lib/locale:${APPDIR}/usr/lib/locale"
     fi
 
     export TERMINFO="${APPDIR}/usr/share/terminfo"
@@ -78,6 +80,11 @@ class TmuxBuilder < AppImage::Builder
     (appdir/"etc").mkpath
     ohai "Install #{appdir}/etc/tmux.conf" if verbose
     (appdir/"etc/tmux.conf").write(tmux_conf)
+    system("mkdir -p #{appdir.lib}/locale")
+    system("#{Formula["glibc"].opt_bin}/localedef -i en_US -f UTF-8 #{appdir.lib}/locale/en_US")
+    system("#{Formula["glibc"].opt_bin}/localedef -i en_US -f UTF-8 #{appdir.lib}/locale/en_US.utf8")
+    system("#{Formula["glibc"].opt_bin}/localedef -i ja_JP -f UTF-8 #{appdir.lib}/locale/ja_JP")
+    system("#{Formula["glibc"].opt_bin}/localedef -i ja_JP -f UTF-8 #{appdir.lib}/locale/ja_JP.utf8")
     system("cp -pRv #{Formula["z80oolong/tmux/tmux-ncurses@6.2"].opt_share}/terminfo #{appdir.share}")
   end
 end
