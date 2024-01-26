@@ -21,7 +21,7 @@ class TmuxAT34Next < Formula
     depends_on "patchelf" => :build
   end
 
-  depends_on "z80oolong/tmux/tmux-libevent@2.2"
+  depends_on "libevent"
   depends_on "utf8proc" => :optional
   depends_on "z80oolong/tmux/tmux-ncurses@6.2"
 
@@ -39,13 +39,6 @@ class TmuxAT34Next < Formula
   end
 
   def install
-    ENV.append "CFLAGS",   "-I#{Formula["z80oolong/tmux/tmux-libevent@2.2"].opt_include}"
-    ENV.append "CPPFLAGS", "-I#{Formula["z80oolong/tmux/tmux-libevent@2.2"].opt_include}"
-    ENV.append "LDFLAGS",  "-L#{Formula["z80oolong/tmux/tmux-libevent@2.2"].opt_lib}"
-    ENV.append "CFLAGS",   "-I#{Formula["z80oolong/tmux/tmux-ncurses@6.2"].opt_include}"
-    ENV.append "CPPFLAGS", "-I#{Formula["z80oolong/tmux/tmux-ncurses@6.2"].opt_include}"
-    ENV.append "LDFLAGS",  "-L#{Formula["z80oolong/tmux/tmux-ncurses@6.2"].opt_lib}"
-
     if build.with?("version-master") then
       inreplace "configure.ac" do |s|
         s.gsub!(/AC_INIT\(\[tmux\],[^)]*\)/, "AC_INIT([tmux], master)")
@@ -62,6 +55,7 @@ class TmuxAT34Next < Formula
       --disable-Dependency-tracking
       --prefix=#{prefix}
       --sysconfdir=$$APPDIR/etc/tmux.conf:$$HOMEBREW_PREFIX/etc
+      --enable-sixel
     ]
 
     args << "--enable-utf8proc" if build.with?("utf8proc")

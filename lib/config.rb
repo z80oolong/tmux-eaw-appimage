@@ -7,6 +7,24 @@ module Config
 
   def current_vm_provider
     return "lxc"
+  end
+
+  def current_libvirt_driver
+    return "qemu"
+  end
+
+  def current_vm_provider
+    return "lxc"
+    #return "libvirt"
+  end
+
+  def current_libvirt_driver
+    return "qemu"
+    #return "kvm"
+  end
+
+  def current_vm_provider
+    return "lxc"
     #return "libvirt"
   end
 
@@ -62,7 +80,7 @@ module Config
   end
 
   def commit_long
-    return "fda393773485c7c9236e4cf0c18668ab809d2574"
+    return "bdf8e614af34ba1eaa8243d3a818c8546cb21812"
   end
 
   def commit
@@ -70,7 +88,7 @@ module Config
   end
 
   def current_appimage_revision
-    return 53
+    return 54
   end
 
   def release_dir

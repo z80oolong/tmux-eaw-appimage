@@ -23,6 +23,7 @@ Vagrant.configure("2") do |config|
   end
   config.vm.define "vm_for_build_tmux_eaw_appimage_#{Config::current_appimage_revision}"
   config.ssh.insert_key = false
+  config.vm.boot_timeout = 1200
   config.vm.network :forwarded_port, guest: 22, host: 12022
   config.vm.synced_folder "./", "/vagrant", type: "rsync", disabled: false, \
                                              accessmode: "squash", owner: "1000"
@@ -46,6 +47,6 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provider :lxc do |lxc|
-    lxc.customize 'cgroup.memory.limit_in_bytes', '20480M'
+    lxc.customize 'cgroup.memory.limit_in_bytes', (20 * 1024 * 1024 * 1024)
   end
 end
