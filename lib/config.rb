@@ -2,7 +2,7 @@ module Config
   module_function
 
   def stable_version?
-    true
+    false
   end
 
   def current_vm_provider
