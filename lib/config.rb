@@ -62,11 +62,11 @@ module Config
   end
 
   def all_stable_version
-    return %w[2.6 2.7 2.8 2.9 2.9a 3.0 3.0a 3.1 3.1a 3.1b 3.1c 3.2 3.2a 3.3 3.3a]
+    return %w[2.6 2.7 2.8 2.9 2.9a 3.0 3.0a 3.1 3.1a 3.1b 3.1c 3.2 3.2a 3.3 3.3a 3.4]
   end
 
   def current_head_formula_version
-    return "3.4-next"
+    return "3.5-next"
   end
 
   def all_stable_formulae
@@ -80,7 +80,7 @@ module Config
   end
 
   def commit_long
-    return "bdf8e614af34ba1eaa8243d3a818c8546cb21812"
+    return "608d113486835515e7a89b1511704440c68ae817"
   end
 
   def commit
