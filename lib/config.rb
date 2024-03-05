@@ -80,7 +80,7 @@ module Config
   end
 
   def commit_long
-    return "bdf8e614af34ba1eaa8243d3a818c8546cb21812"
+    return "ea7136fb838a2831d38e11ca94094cea61a01e3a"
   end
 
   def commit
