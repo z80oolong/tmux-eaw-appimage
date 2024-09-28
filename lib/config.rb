@@ -2,7 +2,7 @@ module Config
   module_function
 
   def stable_version?
-    false
+    true
   end
 
   def current_vm_provider
@@ -55,18 +55,18 @@ module Config
 
   def current_version_list
     if stable_version? then
-      return ["3.4"]
+      return ["3.5"]
     else
       return ["HEAD-#{commit}"]
     end
   end
 
   def all_stable_version
-    return %w[2.6 2.7 2.8 2.9 2.9a 3.0 3.0a 3.1 3.1a 3.1b 3.1c 3.2 3.2a 3.3 3.3a 3.4]
+    return %w[2.6 2.7 2.8 2.9 2.9a 3.0 3.0a 3.1 3.1a 3.1b 3.1c 3.2 3.2a 3.3 3.3a 3.4 3.5]
   end
 
   def current_head_formula_version
-    return "3.5-next"
+    return "3.6-next"
   end
 
   def all_stable_formulae
@@ -80,7 +80,7 @@ module Config
   end
 
   def commit_long
-    return "34807388b064ed922293f128324b7d5d96f0c84d"
+    return "7c30056d96689cc8a66c748e7a18e180665b7d14"
   end
 
   def commit
