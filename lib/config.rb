@@ -55,14 +55,14 @@ module Config
 
   def current_version_list
     if stable_version? then
-      return ["3.5"]
+      return ["3.5a"]
     else
       return ["HEAD-#{commit}"]
     end
   end
 
   def all_stable_version
-    return %w[2.6 2.7 2.8 2.9 2.9a 3.0 3.0a 3.1 3.1a 3.1b 3.1c 3.2 3.2a 3.3 3.3a 3.4 3.5]
+    return %w[2.6 2.7 2.8 2.9 2.9a 3.0 3.0a 3.1 3.1a 3.1b 3.1c 3.2 3.2a 3.3 3.3a 3.4 3.5 3.5a]
   end
 
   def current_head_formula_version
@@ -80,7 +80,7 @@ module Config
   end
 
   def commit_long
-    return "7c30056d96689cc8a66c748e7a18e180665b7d14"
+    return "cb00e869ea34ed28bdd8f700d425fd250b209a9e"
   end
 
   def commit
