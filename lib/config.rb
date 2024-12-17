@@ -7,24 +7,6 @@ module Config
 
   def current_vm_provider
     return "lxc"
-  end
-
-  def current_libvirt_driver
-    return "qemu"
-  end
-
-  def current_vm_provider
-    return "lxc"
-    #return "libvirt"
-  end
-
-  def current_libvirt_driver
-    return "qemu"
-    #return "kvm"
-  end
-
-  def current_vm_provider
-    return "lxc"
     #return "libvirt"
   end
 
