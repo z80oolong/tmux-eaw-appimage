@@ -12,8 +12,7 @@ Vagrant.configure("2") do |config|
       brew install gcc && \
       brew tap #{Config::appimage_tap_name} && \
       brew tap #{Config::current_tap_name} && \
-      env HOMEBREW_ARCH='x86-64' brew install --only-dependencies #{Config::all_stable_formulae.join(" ")} && \
-      env HOMEBREW_ARCH='x86-64' brew install --only-dependencies --formula #{Config::current_head_formula}
+      env HOMEBREW_ARCH='x86-64' brew install --only-dependencies #{Config::all_formulae.join(" ")}
     fi
   ]
 end
