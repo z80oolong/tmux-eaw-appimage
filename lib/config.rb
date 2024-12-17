@@ -7,14 +7,6 @@ module Config
 
   def current_vm_provider
     return "lxc"
-  end
-
-  def current_libvirt_driver
-    return "qemu"
-  end
-
-  def current_vm_provider
-    return "lxc"
     #return "libvirt"
   end
 
@@ -23,14 +15,8 @@ module Config
     #return "kvm"
   end
 
-  def current_vm_provider
-    return "lxc"
-    #return "libvirt"
-  end
-
-  def current_libvirt_driver
-    return "qemu"
-    #return "kvm"
+  def appimage_arch
+    return "x86_64"
   end
 
   def appimage_tap_name
@@ -53,42 +39,56 @@ module Config
     return "#{current_formula_name}-eaw"
   end
 
-  def current_version_list
+  def current_builder_path
     if stable_version? then
-      return ["3.3a"]
+      return "#{lib_dir}/#{current_builder_name}@#{current_version}.rb"
     else
-      return ["HEAD-#{commit}"]
+      return "#{lib_dir}/#{current_builder_name}-head.rb"
+    end
+  end
+
+  def current_appimage_path
+    return "./#{current_appimage_name}-#{current_version}-#{appimage_arch}.AppImage"
+  end
+
+  def current_version
+    if stable_version? then
+      return "3.3a"
+    else
+      return "HEAD-#{commit}"
     end
   end
 
   def all_stable_version
-    return %w[2.6 2.7 2.8 2.9 2.9a 3.0 3.0a 3.1 3.1a 3.1b 3.1c 3.2 3.2a 3.3 3.3a 3.4]
-  end
-
-  def current_head_formula_version
-    return "3.5-next"
-  end
-
-  def all_stable_formulae
-    return all_stable_version.map do |v|
-      "#{Config::current_tap_name}/#{Config::current_formula_name}@#{v}"
-    end
-  end
-
-  def current_head_formula
-    return "#{lib_dir}/#{current_formula_name}@#{current_head_formula_version}.rb"
+    return %w[3.3 3.3a 3.4 3.5 3.5a]
   end
 
   def commit_long
-    return "608d113486835515e7a89b1511704440c68ae817"
+    return "ae8f2208c98e3c2d6e3fe4cad2281dce8fd11f31"
   end
 
   def commit
     return commit_long[0..7]
   end
 
+  def current_formula
+    if stable_version? then
+      return "#{current_tap_name}/#{current_formula_name}@#{current_version}"
+    else
+      return "#{current_tap_name}/#{current_formula_name}-head"
+    end
+  end
+  
+  def all_formulae
+    result = all_stable_version.map do |v|
+      "#{current_tap_name}/#{current_formula_name}@#{v}"
+    end
+    result << "#{current_tap_name}/#{current_formula_name}-head"
+    return result
+  end
+
   def current_appimage_revision
-    return 54
+    return 56
   end
 
   def release_dir
@@ -97,9 +97,5 @@ module Config
 
   def lib_dir
     return "/vagrant/lib"
-  end
-
-  def appimage_arch
-    return "x86_64"
   end
 end
